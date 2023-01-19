@@ -828,12 +828,19 @@ int main(void)
 		for (it = std_vector.begin(); it < std_vector.end(); it++)
 			logFile << ' ' << *it;
 		logFile << std::endl;
+		logFile << "size = : " << std_vector.size() << std::endl;
+		logFile << "capacity = : " << std_vector.capacity() << std::endl;
+		logFile << std::endl;
+
 		
 		std_vector.insert (it, 2, 300);
 
 		logFile << "After second insertion, std_vector contains:" << std::endl;
 		for (it = std_vector.begin(); it < std_vector.end(); it++)
 			logFile << ' ' << *it;
+		logFile << std::endl;
+		logFile << "size = : " << std_vector.size() << std::endl;
+		logFile << "capacity = : " << std_vector.capacity() << std::endl;
 		logFile << std::endl;
 
 		it = std_vector.begin();
@@ -845,6 +852,9 @@ int main(void)
 		for (it = std_vector.begin(); it < std_vector.end(); it++)
 			logFile << ' ' << *it;
 		logFile << std::endl;
+		logFile << "size = : " << std_vector.size() << std::endl;
+		logFile << "capacity = : " << std_vector.capacity() << std::endl;
+		logFile << std::endl;
 
 		int array[] = {501, 502, 503};
 		std_vector.insert (std_vector.begin(), array, array + 3);
@@ -852,6 +862,9 @@ int main(void)
 		logFile << "After last insertion, std_vector contains:" << std::endl;
 		for (it = std_vector.begin(); it < std_vector.end(); it++)
 			logFile << ' ' << *it;
+		logFile << std::endl;
+		logFile << "size = : " << std_vector.size() << std::endl;
+		logFile << "capacity = : " << std_vector.capacity() << std::endl;
 		logFile << std::endl;
 
 		logFile << std::endl;
@@ -862,27 +875,25 @@ int main(void)
 		ft::vector<int>				ft_vector (3,100);
 		ft::vector<int>::iterator	iter;
 
-		std::cout << "DEBUG 0" << std::endl;
-		
 		iter = ft_vector.begin();
 		iter = ft_vector.insert(iter, 200);
-
-		std::cout << "DEBUG 1" << std::endl;
 
 		logFile << "After first insertion, ft_vector contains:" << std::endl;
 		for (iter = ft_vector.begin(); iter < ft_vector.end(); iter++)
 			logFile << ' ' << *iter;
 		logFile << std::endl;
-
-		std::cout << "DEBUG 2" << std::endl;
+		logFile << "size = : " << ft_vector.size() << std::endl;
+		logFile << "capacity = : " << ft_vector.capacity() << std::endl;
+		logFile << std::endl;
 
 		ft_vector.insert (iter, 2, 300);
-
-		std::cout << "DEBUG 3" << std::endl;
 
 		logFile << "After second insertion, ft_vector contains:" << std::endl;
 		for (iter = ft_vector.begin(); iter < ft_vector.end(); iter++)
 			logFile << ' ' << *iter;
+		logFile << std::endl;
+		logFile << "size = : " << ft_vector.size() << std::endl;
+		logFile << "capacity = : " << ft_vector.capacity() << std::endl;
 		logFile << std::endl;
 
 		iter = ft_vector.begin();
@@ -890,21 +901,24 @@ int main(void)
 		ft::vector<int>	ft_vector_2(2,400);
 		ft_vector.insert(iter + 2, ft_vector_2.begin(), ft_vector_2.end());
 
-		std::cout << "DEBUG 4" << std::endl;
 
 		logFile << "After third insertion, ft_vector contains:" << std::endl;
 		for (iter = ft_vector.begin(); iter < ft_vector.end(); iter++)
 			logFile << ' ' << *iter;
 		logFile << std::endl;
+		logFile << "size = : " << ft_vector.size() << std::endl;
+		logFile << "capacity = : " << ft_vector.capacity() << std::endl;
+		logFile << std::endl;
 
 		int tab[] = {501, 502, 503};
 		ft_vector.insert (ft_vector.begin(), tab, tab + 3);
 
-		std::cout << "DEBUG 5" << std::endl;
-
 		logFile << "After last insertion, ft_vector contains:" << std::endl;
 		for (iter = ft_vector.begin(); iter < ft_vector.end(); iter++)
 			logFile << ' ' << *iter;
+		logFile << std::endl;
+		logFile << "size = : " << ft_vector.size() << std::endl;
+		logFile << "capacity = : " << ft_vector.capacity() << std::endl;
 		logFile << std::endl;
 
 		// Comparison

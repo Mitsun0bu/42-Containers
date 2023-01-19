@@ -406,74 +406,49 @@ namespace ft
             template <class InputIterator>
             void insert (iterator position, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last)
             {
-                // Check that position is a valid iterator
-                if (position < begin() || position >= end())
+                if (position < begin() || position > end())
                     throw std::out_of_range("Invalid iterator position");
 
-                // Check that the range [first, last) is valid
                 if (first > last)
                     throw std::invalid_argument("Invalid range");
 
-                // Compute the number of elements to insert
                 size_type count = std::distance(first, last);
 
-                // Check for overflow when computing the new size
-                if (_size > std::numeric_limits<size_type>::max() - count)
+                if (_size > max_size() - count)
                     throw std::length_error("Size overflow");
 
                 size_type new_size = _size + count;
 
-                // Make sure there is enough capacity
                 if (new_size > _capacity)
-                    reserve(std::max(new_size, _capacity * 2));
+                    reserve(_capacity * 2);
 
-                // Copy elements to a temporary buffer
-                std::vector<value_type> temp(first, last);
+                vector temp(first, last);
+ 
+                // for (long unsigned int i = _size - 1; i > std::distance(begin(), position); i--)
+                // {
+                //     std::cout << "i_1 = " << i << std::endl;
+                //     _dataArray[i + count] = _dataArray[i];
+                // }
 
-                // Move elements after position to make room for the new elements
-                for (size_type i = _size - 1; i >= static_cast<size_type>(position - begin()); i--)
+                // for (long unsigned int i = std::distance(begin(), position); i < std::distance(begin(), position) + count; i++)
+                // {
+                //     std::cout << "i_2 = " << i << std::endl;
+                //     _dataArray[i + static_cast<size_type>(position - begin())] = temp[i];
+                // }
+
+                for (size_type i = _size - 1; i > static_cast<size_type>(position - begin()); i--)
+                {
+                    std::cout << "i_1 = " << i << std::endl;
                     _dataArray[i + count] = _dataArray[i];
+                }
 
-                // Insert the new elements
-                std::copy(temp.begin(), temp.end(), position);
+                for (size_type i = 0; i < count; i++)
+                {
+                    std::cout << "i_2 = " << i << std::endl;
+                    _dataArray[i + static_cast<size_type>(position - begin())] = temp[i];
+                }
 
                 _size = new_size;
-
-                // std::cout << "DEBUG 3.1" << std::endl;
-
-				// if (position < begin() || position > end())
-				// 	throw std::out_of_range("Invalid iterator position");
-				// if (first > last)
-				// 	throw std::invalid_argument("Invalid range");
-
-                // std::cout << "DEBUG 3.2" << std::endl;
-
-                // difference_type pos         = position - begin();
-                // size_type       count       = std::distance(first, last);
-                // size_type       new_size    = _size + count;
-
-                // std::cout << "DEBUG 3.3" << std::endl;
-
-                // if (new_size > _capacity)
-                //     reserve(new_size);
-                
-                // std::cout << "DEBUG 3.4" << std::endl;
-
-                // for (size_type i = _size - 1; i >= static_cast<size_type>(pos); i--)
-				// 	_dataArray[i + count] = _dataArray[i];
-
-                // std::cout << "DEBUG 3.5" << std::endl;
-
-				// try
-				// {
-				// 	std::copy(first, last, begin() + pos);
-				// }
-				// catch (...)
-				// {
-				// 	_capacity = 0;
-				// 	throw;
-				// }
-				// _size += count;
             }
 
             iterator insert(iterator position, const value_type& val)
@@ -565,37 +540,6 @@ namespace ft
                 return ;
             }
 
-            /* ************************************** */
-            /*                                        */
-            /*      ~~~ RELATIONAL OPERATORS ~~~      */
-            /*                                        */
-            /* ************************************** */
-
-            // bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
-            // {
-
-            // }
-            // bool operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
-            // {
-
-            // }
-            // bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
-            // {
-
-            // }
-            // bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
-            // {
-
-            // }
-            // bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
-            // {
-
-            // }
-            // bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
-            // {
-
-            // }
-
             /* *********************** */
             /*                         */
             /*      ~~~ UTILS ~~~      */
@@ -632,6 +576,15 @@ namespace ft
 
                 _dataArray  = newDataArray;
             }
+
+            template <class InputIterator>
+            void copy( InputIterator first, InputIterator last, iterator result )
+            {
+                while (first!=last) {
+                    *result = *first;
+                    ++result; ++first;
+                }
+            }
     };
 
             /* ************************************** */
@@ -639,7 +592,6 @@ namespace ft
             /*      ~~~ RELATIONAL OPERATORS ~~~      */
             /*                                        */
             /* ************************************** */
-
 
             template <class T, class Alloc>
             bool operator== (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)

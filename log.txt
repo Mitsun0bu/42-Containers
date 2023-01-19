@@ -328,17 +328,129 @@
 	TEST OUTPUT WITH std::vector
 After first insertion, std_vector contains:
  200 100 100 100
+size = : 4
+capacity = : 6
+
 After second insertion, std_vector contains:
  200 100 100 100 300 300
+size = : 6
+capacity = : 6
+
 After third insertion, std_vector contains:
  200 100 400 400 100 100 300 300
+size = : 8
+capacity = : 12
+
 After last insertion, std_vector contains:
  501 502 503 200 100 400 400 100 100 300 300
+size = : 11
+capacity = : 12
+
 
 	TEST OUTPUT WITH ft::vector
 After first insertion, ft_vector contains:
  200 100 100 100
+size = : 4
+capacity = : 6
+
 After second insertion, ft_vector contains:
  200 100 100 100 300 300
+size = : 6
+capacity = : 6
+
 After third insertion, ft_vector contains:
- 200 100 400 400 100 100 300 300
+ 200 100 100 100 300 300 0 0
+size = : 8
+capacity = : 12
+
+After last insertion, ft_vector contains:
+ 501 502 503 100 100 100 100 300 300 0 0
+size = : 11
+capacity = : 12
+
+
+~~~~~ TEST# 18 - ERASE ~~~~~
+
+	TEST OUTPUT WITH std::vector
+	elem[0] = 4
+	elem[1] = 5
+	elem[2] = 7
+	elem[3] = 8
+	elem[4] = 9
+	elem[5] = 10
+	size = 6
+	capacity = 16
+
+	TEST OUTPUT WITH ft::vector
+	elem[0] = 4
+	elem[1] = 5
+	elem[2] = 7
+	elem[3] = 8
+	elem[4] = 9
+	elem[5] = 10
+	size = 6
+	capacity = 16
+
+~~~~~ TEST# 19 - SWAP ~~~~~
+
+	TEST OUTPUT WITH std::vector
+	before swap : elem[0] = 100
+	before swap : elem[1] = 100
+	before swap : elem[2] = 100
+	size = 3
+	capacity = 3
+	after swap : elem[0] = 200
+	after swap : elem[1] = 200
+	after swap : elem[2] = 200
+	after swap : elem[3] = 200
+	after swap : elem[4] = 200
+	size = 5
+	capacity = 5
+
+	TEST OUTPUT WITH ft::vector
+	before swap : elem[0] = 100
+	before swap : elem[1] = 100
+	before swap : elem[2] = 100
+	size = 3
+	capacity = 3
+	after swap : elem[0] = 200
+	after swap : elem[1] = 200
+	after swap : elem[2] = 200
+	after swap : elem[3] = 200
+	after swap : elem[4] = 200
+	size = 5
+	capacity = 5
+
+~~~~~ TEST# 20 - CLEAR ~~~~~
+
+	TEST OUTPUT WITH std::vector
+	elem[0] = 100
+	elem[1] = 200
+	elem[2] = 300
+	size = 3
+	capacity = 4
+
+	call to clear()
+	size = 0
+	capacity = 4
+
+	elem[0] = 1101
+	elem[1] = 2202
+	size = 2
+	capacity = 4
+
+	TEST OUTPUT WITH ft::vector
+	elem[0] = 100
+	elem[1] = 200
+	elem[2] = 300
+	size = 3
+	capacity = 4
+
+	call to clear()
+	size = 0
+	capacity = 4
+
+	elem[0] = 1101
+	elem[1] = 2202
+	size = 2
+	capacity = 4
