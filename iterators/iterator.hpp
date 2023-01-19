@@ -22,35 +22,83 @@ namespace ft
 	{
 		public:
 
-			// TYPE DEFINITIONS
+			/* ********************************** */
+            /*                                    */
+            /*      ~~~ TYPE DEFINITIONS ~~~      */
+            /*                                    */
+            /* ********************************** */
+
 			typedef typename vector::value_type		value_type;
 			typedef ptrdiff_t						difference_type;
 			typedef std::random_access_iterator_tag	iterator_category;
 			typedef value_type*						pointer;
 			typedef value_type&						reference;
 
-			// DEFAULT CONSTRUCTOR
+			/* ************************************* */
+            /*                                       */
+            /*      ~~~ DEFAULT CONSTRUCTOR ~~~      */
+            /*                                       */
+            /* ************************************* */
+
 			Iterator()
 				: _ptr(NULL)
 			{
 				return ;
 			}
 
-			// CONSTRUCTOR
+			/* ***************************** */
+            /*                               */
+            /*      ~~~ CONSTRUCTOR ~~~      */
+            /*                               */
+            /* ***************************** */
+
 			Iterator(pointer ptr)
 				: _ptr(ptr)
 			{
 				return ;
 			}
 
-			// PREFIX INCREMENT OPERATOR
+			/* ********************************** */
+            /*                                    */
+            /*      ~~~ COPY CONSTRUCTOR ~~~      */
+            /*                                    */
+            /* ********************************** */
+
+			Iterator(const Iterator& src)
+				: _ptr(src._ptr)
+			{
+				return ;
+			}
+
+			/* **************************** */
+            /*                              */
+            /*      ~~~ DESTRUCTOR ~~~      */
+            /*                              */
+            /* **************************** */
+
+			~Iterator()
+			{
+				return ;
+			}
+
+			/* ******************************************* */
+            /*                                             */
+            /*      ~~~ PREFIX INCREMENT OPERATOR ~~~      */
+            /*                                             */
+            /* ******************************************* */
+
 			Iterator& operator++()
 			{
 				_ptr++;
 				return (*this);
 			}
 
-			// POSTFIX INCREMENT OPERATOR
+			/* ******************************************** */
+			/*                                              */
+			/*      ~~~ POSTFIX INCREMENT OPERATOR ~~~      */
+			/*                                              */
+			/* ******************************************** */
+
 			Iterator operator++(int)
 			{
 				Iterator  it = *this;
@@ -58,14 +106,24 @@ namespace ft
 				return (it);
 			}
 
-			// PREFIX DECREMENT OPERATOR
+			/* ******************************************* */
+			/*                                             */
+			/*      ~~~ PREFIX DECREMENT OPERATOR ~~~      */
+			/*                                             */
+			/* ******************************************* */
+
 			Iterator& operator--()
 			{
 				_ptr--;
 				return (*this);
 			}
 
-			// POSTFIX DECREMENT OPERATOR
+			/* ******************************************** */
+			/*                                              */
+			/*      ~~~ POSTFIX DECREMENT OPERATOR ~~~      */
+			/*                                              */
+			/* ******************************************** */
+
 			Iterator operator--(int)
 			{
 				Iterator  it = *this;
@@ -73,7 +131,13 @@ namespace ft
 				return (it);
 			}
 
-			// ARITHMETIC OPERATOR '+' ON INT
+			/* ************************************** */
+			/*                                        */
+			/*      ~~~ ARITHMETIC OPERATORS ~~~      */
+			/*                                        */
+			/* ************************************** */
+
+			// OPERATOR '+' ON INT
 			Iterator operator+(int n)
 			{
 				Iterator it = *this;
@@ -81,7 +145,7 @@ namespace ft
 				return (it);
 			}
 
-			// ARITHMETIC OPERATOR '-' ON INT
+			// OPERATOR '-' ON INT
 			Iterator operator-(int n)
 			{
 				Iterator it = *this;
@@ -89,30 +153,43 @@ namespace ft
 				return (it);
 			}
 
-			// ARITHMETIC OPERATOR '-' ON ANOTHER VECTOR
+			// OPERATOR '-' ON ANOTHER VECTOR
 			difference_type operator-(const Iterator& other) const
 			{
 				return (_ptr - other._ptr);
 			}
 
-			// POSTFIX INCREMENT OPERATOR
+			/* ************************************** */
+			/*                                        */
+			/*      ~~~ ASSIGNMENT OPERATORS ~~~      */
+			/*                                        */
+			/* ************************************** */
+
+			Iterator& operator=(const Iterator& src)
+			{
+				if (this != &src)
+					_ptr = src._ptr;
+
+				return (*this);
+			}
+
 			Iterator& operator+=(int n)
 			{
 				_ptr += n;
 				return (*this);
 			}
 
-			// PREFIX DECREMENT OPERATOR
 			Iterator& operator-=(int n)
 			{
 				_ptr -= n;
 				return (*this);
 			}
 
-			reference	operator[](int n)
-			{
-				return *(_ptr + n);
-			}
+			/* *************************************** */
+			/*                                         */
+			/*      ~~~ DEREFERENCE OPERATORS ~~~      */
+			/*                                         */
+			/* *************************************** */
 
 			reference	operator->()
 			{
@@ -123,6 +200,23 @@ namespace ft
 			{
 				return (*_ptr);
 			}
+
+			/* ********************************************** */
+			/*                                                */
+			/*      ~~~ OFFSET DEREFERENCE OPERATORS ~~~      */
+			/*                                                */
+			/* ********************************************** */
+
+			reference	operator[](int n)
+			{
+				return *(_ptr + n);
+			}
+
+			/* *********************************************** */
+			/*                                                 */
+			/*      ~~~ EQUALITY/INEQUALITY OPERATORS ~~~      */
+			/*                                                 */
+			/* *********************************************** */
 
 			bool	operator==(const Iterator& x) const
 			{

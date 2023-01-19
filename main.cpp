@@ -174,46 +174,46 @@ int main(void)
 			std::cout << "TEST# 3  - ITERATORS\t\t: FAILED ❌" << std::endl;
 	}
 
-	// logFile << std::endl << "~~~~~ TEST# 4 - REVERSE ITERATORS ~~~" << std::endl << std::endl;
-	// {
-	// 	logFile << "\tTEST OUTPUT WITH std::vector" << std::endl;
+	logFile << std::endl << "~~~~~ TEST# 4 - REVERSE ITERATORS ~~~" << std::endl << std::endl;
+	{
+		logFile << "\tTEST OUTPUT WITH std::vector" << std::endl;
 
-	// 	std::vector<int>					std_vector(5);
-	// 	std::vector<int>::reverse_iterator	std_reverse_iterator = std_vector.rbegin();
+		std::vector<int>					std_vector(5);
+		std::vector<int>::reverse_iterator	std_reverse_iterator = std_vector.rbegin();
 
-	// 	int i = 0;
-	// 	for (; std_reverse_iterator != std_vector.rend(); ++std_reverse_iterator)
-	// 		*std_reverse_iterator = ++i;
+		int i = 0;
+		for (; std_reverse_iterator != std_vector.rend(); ++std_reverse_iterator)
+			*std_reverse_iterator = ++i;
 
-	// 	for (std::vector<int>::iterator	it = std_vector.begin(); it != std_vector.end(); ++it)
-	// 		logFile << "\tforward loop: elem = " << *it << std::endl;
+		for (std::vector<int>::iterator	it = std_vector.begin(); it != std_vector.end(); ++it)
+			logFile << "\tforward loop: elem = " << *it << std::endl;
 
-	// 	logFile << "\tsize = " << std_vector.size() << std::endl;
-	// 	logFile << "\tcapacity = " << std_vector.capacity() << std::endl;
+		logFile << "\tsize = " << std_vector.size() << std::endl;
+		logFile << "\tcapacity = " << std_vector.capacity() << std::endl;
 
-	// 	logFile << std::endl;
+		logFile << std::endl;
 
-	// 	logFile << "\tTEST OUTPUT WITH std::vector" << std::endl;
+		logFile << "\tTEST OUTPUT WITH ft::vector" << std::endl;
 
-	// 	ft::vector<int>						ft_vector(5);
-	// 	ft::vector<int>::reverse_iterator	ft_reverse_iterator = ft_vector.rbegin();
+		ft::vector<int>						ft_vector(5);
+		ft::vector<int>::reverse_iterator	ft_reverse_iterator = ft_vector.rbegin();
 
-	// 	i = 0;
-	// 	for (; ft_reverse_iterator != ft_vector.rend(); ++ft_reverse_iterator)
-	// 		*ft_reverse_iterator = ++i;
+		i = 0;
+		for (; ft_reverse_iterator != ft_vector.rend(); ++ft_reverse_iterator)
+			*ft_reverse_iterator = ++i;
 
-	// 	for (ft::vector<int>::iterator	it = ft_vector.begin(); it != ft_vector.end(); ++it)
-	// 		logFile << "\tforward loop: elem = " << *it << std::endl;
+		for (ft::vector<int>::iterator	it = ft_vector.begin(); it != ft_vector.end(); ++it)
+			logFile << "\tforward loop: elem = " << *it << std::endl;
 
-	// 	logFile << "\tsize = " << ft_vector.size() << std::endl;
-	// 	logFile << "\tcapacity = " << ft_vector.capacity() << std::endl;
+		logFile << "\tsize = " << ft_vector.size() << std::endl;
+		logFile << "\tcapacity = " << ft_vector.capacity() << std::endl;
 
-	// 	// Print the outcome of the test
-	// 	if (ft_vector.at(0) == 5 && ft_vector.at(4) == 1)
-	// 		std::cout << "TEST# 4  - REVERSE ITERATORS\t: SUCCESS ✔️" << std::endl;
-	// 	else
-	// 		std::cout << "TEST# 4  - REVERSE ITERATORS\t: FAILED ❌" << std::endl;
-	// }
+		// Print the outcome of the test
+		if (ft_vector.at(0) == 5 && ft_vector.at(4) == 1)
+			std::cout << "TEST# 4  - REVERSE ITERATORS\t: SUCCESS ✔️" << std::endl;
+		else
+			std::cout << "TEST# 4  - REVERSE ITERATORS\t: FAILED ❌" << std::endl;
+	}
 
 	logFile << std::endl << "~~~~~ TEST# 5 - CONST ITERATORS ~~~" << std::endl << std::endl;
 	{
