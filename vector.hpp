@@ -45,6 +45,7 @@ namespace ft
             typedef const T&    const_reference;
             typedef Alloc       allocator_type;
             typedef size_t      size_type;
+            typedef ptrdiff_t	difference_type;
 
             /* ********************************* */
             /*                                   */
@@ -472,7 +473,7 @@ namespace ft
 
 				reserve(new_size);
 				for (size_type i = 0; i < count; i++)
-					alloc.construct(_dataArray + i, *(_dataArray + i - std::distance(first, last)));
+					_alloc.construct(_dataArray + i, *(_dataArray + i - std::distance(first, last)));
 				for (size_type i = size() + count - 1; i >= index + count; i--)
 					_dataArray[i] = _dataArray[i - count];
 				try
@@ -482,7 +483,7 @@ namespace ft
 				}
 				catch (...)
 				{
-					capacity = 0;
+					_capacity = 0;
 					throw;
 				}
 				_size += count;
