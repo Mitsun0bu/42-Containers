@@ -244,57 +244,6 @@ namespace ft
                         _dataArray[i] = val;
                     _size = n;
                 }
-
-                // size_t old_size = _size;
-
-                // _size = n;
-                // reallocDataArray(n);
-
-                // if (n > old_size)
-                //     for (size_type i = old_size; i < n; ++i)
-                //         _dataArray[i] = val;
-
-                // if (n < _size)
-                // {
-                //     pointer newDataArray = _alloc.allocate(n);
-                //     for (size_t i = 0; i < n; i++)
-                //         _alloc.construct(newDataArray + i);
-                //     for (size_t i = 0; i < n; i++)
-                //         newDataArray[i] = _dataArray[i];
-                //     deleteDataArray();
-                //     _size = n;
-                //     _dataArray  = newDataArray;
-                // }
-                // else if (n > _size && n < _capacity)
-                // {
-                //     pointer newDataArray = _alloc.allocate(n);
-                //     for (size_t i = 0; i < n; i++)
-                //         _alloc.construct(newDataArray + i);
-                //     size_t i = 0;
-                //     for (; i < _size; i++)
-                //         newDataArray[i] = _dataArray[i];
-                //     for (; i < n; i ++)
-                //         newDataArray[i] = val;
-                //     deleteDataArray();
-                //     _size = n;
-                //     _dataArray  = newDataArray;
-                // }
-                // else if (n > _size && n > _capacity)
-                // {
-                //     pointer newDataArray = _alloc.allocate(n);
-                //     for (size_t i = 0; i < n; i++)
-                //         _alloc.construct(newDataArray + i);
-                //     size_t i = 0;
-                //     for (; i < _size; i++)
-                //         newDataArray[i] = _dataArray[i];
-                //     for (; i < n; i ++)
-                //         newDataArray[i] = val;
-                //     deleteDataArray();
-                //     _size = n;
-                //     _capacity = n;
-                //     _dataArray  = newDataArray;
-                // }
-                // return ;
             }
 
             size_t capacity(void) const
@@ -457,61 +406,67 @@ namespace ft
             template <class InputIterator>
             void insert (iterator position, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last)
             {
-                std::cout << "DEBUG 3.1" << std::endl;
+                // Check that position is a valid iterator
+                if (position < begin() || position >= end())
+                    throw std::out_of_range("Invalid iterator position");
 
-				if (position < begin() || position > end())
-					throw std::out_of_range("Invalid iterator position");
-				if (first > last)
-					throw std::invalid_argument("Invalid range");
+                // Check that the range [first, last) is valid
+                if (first > last)
+                    throw std::invalid_argument("Invalid range");
 
-                std::cout << "DEBUG 3.2" << std::endl;
+                // Compute the number of elements to insert
+                size_type count = std::distance(first, last);
 
-                difference_type pos         = position - begin();
-                size_type       count       = std::distance(first, last);
-                size_type       new_size    = _size + count;
+                // Check for overflow when computing the new size
+                if (_size > std::numeric_limits<size_type>::max() - count)
+                    throw std::length_error("Size overflow");
 
-                std::cout << "DEBUG 3.3" << std::endl;
+                size_type new_size = _size + count;
 
+                // Make sure there is enough capacity
                 if (new_size > _capacity)
-                    reserve(new_size);
+                    reserve(std::max(new_size, _capacity * 2));
+
+                // Copy elements to a temporary buffer
+                std::vector<value_type> temp(first, last);
+
+                // Move elements after position to make room for the new elements
+                for (size_type i = _size - 1; i >= static_cast<size_type>(position - begin()); i--)
+                    _dataArray[i + count] = _dataArray[i];
+
+                // Insert the new elements
+                std::copy(temp.begin(), temp.end(), position);
+
+                _size = new_size;
+
+                // std::cout << "DEBUG 3.1" << std::endl;
+
+				// if (position < begin() || position > end())
+				// 	throw std::out_of_range("Invalid iterator position");
+				// if (first > last)
+				// 	throw std::invalid_argument("Invalid range");
+
+                // std::cout << "DEBUG 3.2" << std::endl;
+
+                // difference_type pos         = position - begin();
+                // size_type       count       = std::distance(first, last);
+                // size_type       new_size    = _size + count;
+
+                // std::cout << "DEBUG 3.3" << std::endl;
+
+                // if (new_size > _capacity)
+                //     reserve(new_size);
                 
-                std::cout << "DEBUG 3.4" << std::endl;
+                // std::cout << "DEBUG 3.4" << std::endl;
 
-                for (size_type i = _size - 1; i >= static_cast<size_type>(pos); i--)
-					_dataArray[i + count] = _dataArray[i];
+                // for (size_type i = _size - 1; i >= static_cast<size_type>(pos); i--)
+				// 	_dataArray[i + count] = _dataArray[i];
 
-                std::cout << "DEBUG 3.5" << std::endl;
+                // std::cout << "DEBUG 3.5" << std::endl;
 
-				try
-				{
-					std::copy(first, last, begin() + pos);
-				}
-				catch (...)
-				{
-					_capacity = 0;
-					throw;
-				}
-				_size += count;
-
-				// ft::vector<typename ft::iterator_traits<InputIterator>::value_type> tmp;
-				
-				// while (first != last)
-				// 	tmp.push_back(*first++);
-
-				// difference_type index = &(*position) - _dataArray;
-				// size_type       count = tmp.size();
-				// size_type       new_size = size() + count;
-
-				// reserve(new_size);
-				// 	// _alloc.construct(_dataArray + index + i, tmp[i]);
-				// for (size_type i = 0; i < count; i++)
-				// 	_alloc.construct(_dataArray + i, *(_dataArray + i - std::distance(first, last)));
-				// for (size_type i = size() + count - 1; i >= index + count; i--)
-				// 	_dataArray[i] = _dataArray[i - count];
 				// try
 				// {
-				// 	for (size_type i = 0; i < count; i++)
-				// 		_dataArray[index + i] = tmp[i];
+				// 	std::copy(first, last, begin() + pos);
 				// }
 				// catch (...)
 				// {

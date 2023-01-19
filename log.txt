@@ -102,10 +102,10 @@
 ~~~~~ TEST# 7 - MAX_SIZE ~~~
 
 	TEST OUTPUT WITH std::vector
-	size = 4611686018427387903
+	size = 2305843009213693951
 
 	TEST OUTPUT WITH ft::vector
-	size = 4611686018427387903
+	size = 2305843009213693951
 
 ~~~~~ TEST# 8 - RESIZE ~~~
 
@@ -146,12 +146,12 @@
 	TEST OUTPUT WITH std::vector
 	size = 100
 	capacity = 128
-	max_size = 4611686018427387903
+	max_size = 2305843009213693951
 
 	TEST OUTPUT WITH ft::vector
 	size = 100
 	capacity = 128
-	max_size = 4611686018427387903
+	max_size = 2305843009213693951
 
 ~~~~~ TEST# 10 - EMPTY ~~~
 
