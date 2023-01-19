@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Reverse_iterator.hpp                               :+:      :+:    :+:   */
+/*   reverse_iterator.hpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llethuil <llethuil@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: llethuil <lucas.lethuillier@gmail.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 14:01:41 by llethuil          #+#    #+#             */
-/*   Updated: 2023/01/16 14:12:59 by llethuil         ###   ########lyon.fr   */
+/*   Updated: 2023/01/19 14:32:42 by llethuil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,11 @@ namespace ft
             /*                                    */
             /* ********************************** */
 
-			typedef typename	vector::value_type	value_type;
-			typedef 			value_type*			pointer;
-			typedef				value_type&			reference;
+			typedef typename	vector::value_type				value_type;
+			typedef				ptrdiff_t						difference_type;
+			typedef 			std::random_access_iterator_tag	iterator_category;
+			typedef 			value_type*						pointer;
+			typedef				value_type&						reference;
 
 			/* ************************************* */
             /*                                       */
@@ -66,20 +68,6 @@ namespace ft
 				: _ptr(src._ptr)
 			{
 				return ;
-			}
-
-			/* ************************************* */
-            /*                                       */
-            /*      ~~~ ASSIGNMENT OPERATOR ~~~      */
-            /*                                       */
-            /* ************************************* */
-
-			Reverse_iterator& operator=(const Reverse_iterator& src)
-			{
-				if (this != &src)
-					_ptr = src._ptr;
-
-				return (*this);
 			}
 
 			/* **************************** */
@@ -143,6 +131,74 @@ namespace ft
 				return (iterator);
 			}
 
+			/* ************************************** */
+			/*                                        */
+			/*      ~~~ ARITHMETIC OPERATORS ~~~      */
+			/*                                        */
+			/* ************************************** */
+
+			// OPERATOR '+' ON INT
+			// Reverse_iterator operator+(int n)
+			// {
+			// 	Reverse_iterator it = *this;
+			// 	it += n;
+			// 	return (it);
+			// }
+
+			Reverse_iterator operator+(difference_type n) const
+			{
+				Reverse_iterator it = *this;
+				it += n;
+				return (it);
+			}
+
+			// OPERATOR '-' ON INT
+			// Reverse_iterator operator-(int n)
+			// {
+			// 	Reverse_iterator it = *this;
+			// 	it -= n;
+			// 	return (it);
+			// }
+
+			Reverse_iterator operator-(difference_type n) const
+			{
+				Reverse_iterator it = *this;
+				it -= n;
+				return (it);
+			}
+
+			// OPERATOR '-' ON ANOTHER VECTOR
+			difference_type operator-(const Reverse_iterator& other) const
+			{
+				return (_ptr - other._ptr);
+			}
+
+			/* ************************************* */
+            /*                                       */
+            /*      ~~~ ASSIGNMENT OPERATOR ~~~      */
+            /*                                       */
+            /* ************************************* */
+
+			Reverse_iterator& operator=(const Reverse_iterator& src)
+			{
+				if (this != &src)
+					_ptr = src._ptr;
+
+				return (*this);
+			}
+	
+			Reverse_iterator& operator+=(difference_type n)
+			{
+				_ptr += n;
+				return (*this);
+			}
+
+			Reverse_iterator& operator-=(difference_type n)
+			{
+				_ptr -= n;
+				return (*this);
+			}
+		
 			/* *************************************** */
 			/*                                         */
 			/*      ~~~ DEREFERENCE OPERATORS ~~~      */

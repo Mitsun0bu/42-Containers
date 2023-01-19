@@ -233,6 +233,17 @@ namespace ft
 
             void resize(size_type n, value_type val = value_type())
             {
+                if (n < _size)
+                    _size = n;
+                else if (n > _size)
+                {
+                    if (n > _capacity)
+                        reserve(n);
+                    for (size_type i = _size; i < n; i ++)
+                        _dataArray[i] = val;
+                    _size = n;
+                }
+
                 // size_t old_size = _size;
 
                 // _size = n;
@@ -242,47 +253,47 @@ namespace ft
                 //     for (size_type i = old_size; i < n; ++i)
                 //         _dataArray[i] = val;
 
-                if (n < _size)
-                {
-                    pointer newDataArray = _alloc.allocate(n);
-                    for (size_t i = 0; i < n; i++)
-                        _alloc.construct(newDataArray + i);
-                    for (size_t i = 0; i < n; i++)
-                        newDataArray[i] = _dataArray[i];
-                    deleteDataArray();
-                    _size = n;
-                    _dataArray  = newDataArray;
-                }
-                else if (n > _size && n < _capacity)
-                {
-                    pointer newDataArray = _alloc.allocate(n);
-                    for (size_t i = 0; i < n; i++)
-                        _alloc.construct(newDataArray + i);
-                    size_t i = 0;
-                    for (; i < _size; i++)
-                        newDataArray[i] = _dataArray[i];
-                    for (; i < n; i ++)
-                        newDataArray[i] = val;
-                    deleteDataArray();
-                    _size = n;
-                    _dataArray  = newDataArray;
-                }
-                else if (n > _size && n > _capacity)
-                {
-                    pointer newDataArray = _alloc.allocate(n);
-                    for (size_t i = 0; i < n; i++)
-                        _alloc.construct(newDataArray + i);
-                    size_t i = 0;
-                    for (; i < _size; i++)
-                        newDataArray[i] = _dataArray[i];
-                    for (; i < n; i ++)
-                        newDataArray[i] = val;
-                    deleteDataArray();
-                    _size = n;
-                    _capacity = n;
-                    _dataArray  = newDataArray;
-                }
-                return ;
+                // if (n < _size)
+                // {
+                //     pointer newDataArray = _alloc.allocate(n);
+                //     for (size_t i = 0; i < n; i++)
+                //         _alloc.construct(newDataArray + i);
+                //     for (size_t i = 0; i < n; i++)
+                //         newDataArray[i] = _dataArray[i];
+                //     deleteDataArray();
+                //     _size = n;
+                //     _dataArray  = newDataArray;
+                // }
+                // else if (n > _size && n < _capacity)
+                // {
+                //     pointer newDataArray = _alloc.allocate(n);
+                //     for (size_t i = 0; i < n; i++)
+                //         _alloc.construct(newDataArray + i);
+                //     size_t i = 0;
+                //     for (; i < _size; i++)
+                //         newDataArray[i] = _dataArray[i];
+                //     for (; i < n; i ++)
+                //         newDataArray[i] = val;
+                //     deleteDataArray();
+                //     _size = n;
+                //     _dataArray  = newDataArray;
+                // }
+                // else if (n > _size && n > _capacity)
+                // {
+                //     pointer newDataArray = _alloc.allocate(n);
+                //     for (size_t i = 0; i < n; i++)
+                //         _alloc.construct(newDataArray + i);
+                //     size_t i = 0;
+                //     for (; i < _size; i++)
+                //         newDataArray[i] = _dataArray[i];
+                //     for (; i < n; i ++)
+                //         newDataArray[i] = val;
+                //     deleteDataArray();
+                //     _size = n;
+                //     _capacity = n;
+                //     _dataArray  = newDataArray;
+                // }
+                // return ;
             }
 
             size_t capacity(void) const
@@ -397,8 +408,12 @@ namespace ft
             /*                            */
             /* ************************** */
 
-            // template <class InputIterator> void     assign (InputIterator first, InputIterator last);
-            // template <class InputIterator> void     insert (iterator position, InputIterator first, InputIterator last);
+            template <class InputIterator>
+            void    assign (typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last)
+            {
+                clear();
+                insert(begin(), first, last);
+            }
 
             void assign(size_type n, const value_type& val)
             {
@@ -436,6 +451,12 @@ namespace ft
                 _size --;
 
                 return ;
+            }
+
+            template <class InputIterator>
+            void insert (iterator position, InputIterator first, InputIterator last)
+            {
+                ;
             }
 
             iterator insert(iterator position, const value_type& val)
