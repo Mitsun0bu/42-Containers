@@ -457,20 +457,30 @@ namespace ft
             template <class InputIterator>
             void insert (iterator position, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last)
             {
+                std::cout << "DEBUG 3.1" << std::endl;
+
 				if (position < begin() || position > end())
 					throw std::out_of_range("Invalid iterator position");
 				if (first > last)
 					throw std::invalid_argument("Invalid range");
 
+                std::cout << "DEBUG 3.2" << std::endl;
+
                 difference_type pos         = position - begin();
                 size_type       count       = std::distance(first, last);
                 size_type       new_size    = _size + count;
 
+                std::cout << "DEBUG 3.3" << std::endl;
+
                 if (new_size > _capacity)
                     reserve(new_size);
                 
-                for (size_type i = _size + count - 1; i >= pos + count; i--)
-					_dataArray[i] = _dataArray[i - count];
+                std::cout << "DEBUG 3.4" << std::endl;
+
+                for (size_type i = _size - 1; i >= static_cast<size_type>(pos); i--)
+					_dataArray[i + count] = _dataArray[i];
+
+                std::cout << "DEBUG 3.5" << std::endl;
 
 				try
 				{
@@ -540,7 +550,7 @@ namespace ft
                 if (_size + n > _capacity)
                     reallocDataArray(_capacity + n);
 
-                for (size_t i = _size + n - 1; i != pos + n; i--)
+                for (size_t i = _size - 1; i >= pos; i--)
                     _dataArray[i] = _dataArray[i - n];
 
                 for (size_t i = pos; i < pos + n; i++)

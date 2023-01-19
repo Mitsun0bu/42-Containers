@@ -338,3 +338,7 @@ After last insertion, std_vector contains:
 	TEST OUTPUT WITH ft::vector
 After first insertion, ft_vector contains:
  200 100 100 100
+After second insertion, ft_vector contains:
+ 200 100 100 100 300 300
+After third insertion, ft_vector contains:
+ 200 100 400 400 100 100 300 300

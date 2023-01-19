@@ -890,6 +890,8 @@ int main(void)
 		ft::vector<int>	ft_vector_2(2,400);
 		ft_vector.insert(iter + 2, ft_vector_2.begin(), ft_vector_2.end());
 
+		std::cout << "DEBUG 4" << std::endl;
+
 		logFile << "After third insertion, ft_vector contains:" << std::endl;
 		for (iter = ft_vector.begin(); iter < ft_vector.end(); iter++)
 			logFile << ' ' << *iter;
@@ -898,32 +900,12 @@ int main(void)
 		int tab[] = {501, 502, 503};
 		ft_vector.insert (ft_vector.begin(), tab, tab + 3);
 
+		std::cout << "DEBUG 5" << std::endl;
+
 		logFile << "After last insertion, ft_vector contains:" << std::endl;
 		for (iter = ft_vector.begin(); iter < ft_vector.end(); iter++)
 			logFile << ' ' << *iter;
 		logFile << std::endl;
-
-		// ft::vector<int>				ft_vector(3, 100);
-		// ft::vector<int>::iterator	iter = ft_vector.begin();
-
-		// iter = ft_vector.insert(iter , 200);
-
-		// for (size_t i = 0; i < ft_vector.size(); i++)
-		// 	logFile << "\telem[" << i << "] = " << ft_vector[i] << std::endl;
-		// logFile << "\tsize = " << ft_vector.size() << std::endl;
-		// logFile << "\tcapacity = " << ft_vector.capacity() << std::endl;
-
-		// logFile << std::endl;
-
-		// iter = ft_vector.begin();
-		// ft_vector.insert (++iter, 2, 300);
-		// // "iter" no longer valid, get a new one
-		// iter = ft_vector.begin();
-
-		// for (size_t i = 0; i < ft_vector.size(); i++)
-		// 	logFile << "\telem[" << i << "] = " << ft_vector[i] << std::endl;
-		// logFile << "\tsize = " << ft_vector.size() << std::endl;
-		// logFile << "\tcapacity = " << ft_vector.capacity() << std::endl;
 
 		// Comparison
 		// int error = false;
