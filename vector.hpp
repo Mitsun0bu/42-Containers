@@ -462,25 +462,19 @@ namespace ft
 				if (first > last)
 					throw std::invalid_argument("Invalid range");
 
-				ft::vector<typename ft::iterator_traits<InputIterator>::value_type> tmp;
-				
-				while (first != last)
-					tmp.push_back(*first++);
+                difference_type pos         = position - begin();
+                size_type       count       = std::distance(first, last);
+                size_type       new_size    = _size + count;
 
-				difference_type index = &(*position) - _dataArray;
-				size_type       count = tmp.size();
-				size_type       new_size = size() + count;
-
-				reserve(new_size);
-					// _alloc.construct(_dataArray + index + i, tmp[i]);
-				for (size_type i = 0; i < count; i++)
-					_alloc.construct(_dataArray + i, *(_dataArray + i - std::distance(first, last)));
-				for (size_type i = size() + count - 1; i >= index + count; i--)
+                if (new_size > _capacity)
+                    reserve(new_size);
+                
+                for (size_type i = _size + count - 1; i >= pos + count; i--)
 					_dataArray[i] = _dataArray[i - count];
+
 				try
 				{
-					for (size_type i = 0; i < count; i++)
-						_dataArray[index + i] = tmp[i];
+					std::copy(first, last, begin() + pos);
 				}
 				catch (...)
 				{
@@ -488,23 +482,37 @@ namespace ft
 					throw;
 				}
 				_size += count;
+
+				// ft::vector<typename ft::iterator_traits<InputIterator>::value_type> tmp;
+				
+				// while (first != last)
+				// 	tmp.push_back(*first++);
+
+				// difference_type index = &(*position) - _dataArray;
+				// size_type       count = tmp.size();
+				// size_type       new_size = size() + count;
+
+				// reserve(new_size);
+				// 	// _alloc.construct(_dataArray + index + i, tmp[i]);
+				// for (size_type i = 0; i < count; i++)
+				// 	_alloc.construct(_dataArray + i, *(_dataArray + i - std::distance(first, last)));
+				// for (size_type i = size() + count - 1; i >= index + count; i--)
+				// 	_dataArray[i] = _dataArray[i - count];
+				// try
+				// {
+				// 	for (size_type i = 0; i < count; i++)
+				// 		_dataArray[index + i] = tmp[i];
+				// }
+				// catch (...)
+				// {
+				// 	_capacity = 0;
+				// 	throw;
+				// }
+				// _size += count;
             }
 
             iterator insert(iterator position, const value_type& val)
             {
-                // size_t pos = position - this->begin();
-
-                // if (_size + 1 > _capacity)
-                //     reallocDataArray(_capacity + 1);
-
-                // for (size_t i = _size; i != pos + 1; i--)
-                //     _dataArray[i] = _dataArray[i - 1];
-
-                // for (size_t i = pos; i < pos + 1; i++)
-                //     _dataArray[i] = val;
-
-                // _size += 1;
-
                 difference_type pos = position - this->begin();
 
                 if (_size + 1 > _capacity)
@@ -515,7 +523,7 @@ namespace ft
                         reallocDataArray(_capacity * 2);
                 }
 
-                size_t i = 0;
+                difference_type i = 0;
                 for (i = _size; i > pos; i--)
                     _dataArray[i] = _dataArray[i - 1];
 

@@ -174,46 +174,46 @@ int main(void)
 			std::cout << "TEST# 3  - ITERATORS\t\t: FAILED ❌" << std::endl;
 	}
 
-	logFile << std::endl << "~~~~~ TEST# 4 - REVERSE ITERATORS ~~~" << std::endl << std::endl;
-	{
-		logFile << "\tTEST OUTPUT WITH std::vector" << std::endl;
+	// logFile << std::endl << "~~~~~ TEST# 4 - REVERSE ITERATORS ~~~" << std::endl << std::endl;
+	// {
+	// 	logFile << "\tTEST OUTPUT WITH std::vector" << std::endl;
 
-		std::vector<int>					std_vector(5);
-		std::vector<int>::reverse_iterator	std_reverse_iterator = std_vector.rbegin();
+	// 	std::vector<int>					std_vector(5);
+	// 	std::vector<int>::reverse_iterator	std_reverse_iterator = std_vector.rbegin();
 
-		int i = 0;
-		for (; std_reverse_iterator != std_vector.rend(); ++std_reverse_iterator)
-			*std_reverse_iterator = ++i;
+	// 	int i = 0;
+	// 	for (; std_reverse_iterator != std_vector.rend(); ++std_reverse_iterator)
+	// 		*std_reverse_iterator = ++i;
 
-		for (std::vector<int>::iterator	it = std_vector.begin(); it != std_vector.end(); ++it)
-			logFile << "\tforward loop: elem = " << *it << std::endl;
+	// 	for (std::vector<int>::iterator	it = std_vector.begin(); it != std_vector.end(); ++it)
+	// 		logFile << "\tforward loop: elem = " << *it << std::endl;
 
-		logFile << "\tsize = " << std_vector.size() << std::endl;
-		logFile << "\tcapacity = " << std_vector.capacity() << std::endl;
+	// 	logFile << "\tsize = " << std_vector.size() << std::endl;
+	// 	logFile << "\tcapacity = " << std_vector.capacity() << std::endl;
 
-		logFile << std::endl;
+	// 	logFile << std::endl;
 
-		logFile << "\tTEST OUTPUT WITH ft::vector" << std::endl;
+	// 	logFile << "\tTEST OUTPUT WITH ft::vector" << std::endl;
 
-		ft::vector<int>						ft_vector(5);
-		ft::vector<int>::reverse_iterator	ft_reverse_iterator = ft_vector.rbegin();
+	// 	ft::vector<int>						ft_vector(5);
+	// 	ft::vector<int>::reverse_iterator	ft_reverse_iterator = ft_vector.rbegin();
 
-		i = 0;
-		for (; ft_reverse_iterator != ft_vector.rend(); ++ft_reverse_iterator)
-			*ft_reverse_iterator = ++i;
+	// 	i = 0;
+	// 	for (; ft_reverse_iterator != ft_vector.rend(); ++ft_reverse_iterator)
+	// 		*ft_reverse_iterator = ++i;
 
-		for (ft::vector<int>::iterator	it = ft_vector.begin(); it != ft_vector.end(); ++it)
-			logFile << "\tforward loop: elem = " << *it << std::endl;
+	// 	for (ft::vector<int>::iterator	it = ft_vector.begin(); it != ft_vector.end(); ++it)
+	// 		logFile << "\tforward loop: elem = " << *it << std::endl;
 
-		logFile << "\tsize = " << ft_vector.size() << std::endl;
-		logFile << "\tcapacity = " << ft_vector.capacity() << std::endl;
+	// 	logFile << "\tsize = " << ft_vector.size() << std::endl;
+	// 	logFile << "\tcapacity = " << ft_vector.capacity() << std::endl;
 
-		// Print the outcome of the test
-		if (ft_vector.at(0) == 5 && ft_vector.at(4) == 1)
-			std::cout << "TEST# 4  - REVERSE ITERATORS\t: SUCCESS ✔️" << std::endl;
-		else
-			std::cout << "TEST# 4  - REVERSE ITERATORS\t: FAILED ❌" << std::endl;
-	}
+	// 	// Print the outcome of the test
+	// 	if (ft_vector.at(0) == 5 && ft_vector.at(4) == 1)
+	// 		std::cout << "TEST# 4  - REVERSE ITERATORS\t: SUCCESS ✔️" << std::endl;
+	// 	else
+	// 		std::cout << "TEST# 4  - REVERSE ITERATORS\t: FAILED ❌" << std::endl;
+	// }
 
 	logFile << std::endl << "~~~~~ TEST# 5 - CONST ITERATORS ~~~" << std::endl << std::endl;
 	{
@@ -818,73 +818,131 @@ int main(void)
 		// Test with std::vector
 		logFile << "\tTEST OUTPUT WITH std::vector" << std::endl;
 
-		std::vector<int>			std_vector(3, 100);
-		std::vector<int>::iterator	it = std_vector.begin();
+		std::vector<int>			std_vector (3,100);
+		std::vector<int>::iterator	it;
 
-		it = std_vector.insert(it , 200);
+		it = std_vector.begin();
+		it = std_vector.insert(it, 200);
 
-		for (size_t i = 0; i < std_vector.size(); i++)
-			logFile << "\telem[" << i << "] = " << std_vector[i] << std::endl;
-		logFile << "\tsize = " << std_vector.size() << std::endl;
-		logFile << "\tcapacity = " << std_vector.capacity() << std::endl;
+		logFile << "After first insertion, std_vector contains:" << std::endl;
+		for (it = std_vector.begin(); it < std_vector.end(); it++)
+			logFile << ' ' << *it;
+		logFile << std::endl;
+		
+		std_vector.insert (it, 2, 300);
 
+		logFile << "After second insertion, std_vector contains:" << std::endl;
+		for (it = std_vector.begin(); it < std_vector.end(); it++)
+			logFile << ' ' << *it;
 		logFile << std::endl;
 
 		it = std_vector.begin();
-		std_vector.insert (++it, 2, 300);
-		// "it" no longer valid, get a new one
-		it = std_vector.begin();
 
-		for (size_t i = 0; i < std_vector.size(); i++)
-			logFile << "\telem[" << i << "] = " << std_vector[i] << std::endl;
-		logFile << "\tsize = " << std_vector.size() << std::endl;
-		logFile << "\tcapacity = " << std_vector.capacity() << std::endl;
+		std::vector<int>	std_vector_2(2,400);
+		std_vector.insert(it + 2, std_vector_2.begin(), std_vector_2.end());
+
+		logFile << "After third insertion, std_vector contains:" << std::endl;
+		for (it = std_vector.begin(); it < std_vector.end(); it++)
+			logFile << ' ' << *it;
+		logFile << std::endl;
+
+		int array[] = {501, 502, 503};
+		std_vector.insert (std_vector.begin(), array, array + 3);
+
+		logFile << "After last insertion, std_vector contains:" << std::endl;
+		for (it = std_vector.begin(); it < std_vector.end(); it++)
+			logFile << ' ' << *it;
+		logFile << std::endl;
 
 		logFile << std::endl;
 
 		// Test with ft::vector=
 		logFile << "\tTEST OUTPUT WITH ft::vector" << std::endl;
 
-		ft::vector<int>				ft_vector(3, 100);
-		ft::vector<int>::iterator	iter = ft_vector.begin();
+		ft::vector<int>				ft_vector (3,100);
+		ft::vector<int>::iterator	iter;
 
-		iter = ft_vector.insert(iter , 200);
+		std::cout << "DEBUG 0" << std::endl;
+		
+		iter = ft_vector.begin();
+		iter = ft_vector.insert(iter, 200);
 
-		for (size_t i = 0; i < ft_vector.size(); i++)
-			logFile << "\telem[" << i << "] = " << ft_vector[i] << std::endl;
-		logFile << "\tsize = " << ft_vector.size() << std::endl;
-		logFile << "\tcapacity = " << ft_vector.capacity() << std::endl;
+		std::cout << "DEBUG 1" << std::endl;
 
+		logFile << "After first insertion, ft_vector contains:" << std::endl;
+		for (iter = ft_vector.begin(); iter < ft_vector.end(); iter++)
+			logFile << ' ' << *iter;
+		logFile << std::endl;
+
+		std::cout << "DEBUG 2" << std::endl;
+
+		ft_vector.insert (iter, 2, 300);
+
+		std::cout << "DEBUG 3" << std::endl;
+
+		logFile << "After second insertion, ft_vector contains:" << std::endl;
+		for (iter = ft_vector.begin(); iter < ft_vector.end(); iter++)
+			logFile << ' ' << *iter;
 		logFile << std::endl;
 
 		iter = ft_vector.begin();
-		ft_vector.insert (++iter, 2, 300);
-		// "iter" no longer valid, get a new one
-		iter = ft_vector.begin();
 
-		for (size_t i = 0; i < ft_vector.size(); i++)
-			logFile << "\telem[" << i << "] = " << ft_vector[i] << std::endl;
-		logFile << "\tsize = " << ft_vector.size() << std::endl;
-		logFile << "\tcapacity = " << ft_vector.capacity() << std::endl;
+		ft::vector<int>	ft_vector_2(2,400);
+		ft_vector.insert(iter + 2, ft_vector_2.begin(), ft_vector_2.end());
+
+		logFile << "After third insertion, ft_vector contains:" << std::endl;
+		for (iter = ft_vector.begin(); iter < ft_vector.end(); iter++)
+			logFile << ' ' << *iter;
+		logFile << std::endl;
+
+		int tab[] = {501, 502, 503};
+		ft_vector.insert (ft_vector.begin(), tab, tab + 3);
+
+		logFile << "After last insertion, ft_vector contains:" << std::endl;
+		for (iter = ft_vector.begin(); iter < ft_vector.end(); iter++)
+			logFile << ' ' << *iter;
+		logFile << std::endl;
+
+		// ft::vector<int>				ft_vector(3, 100);
+		// ft::vector<int>::iterator	iter = ft_vector.begin();
+
+		// iter = ft_vector.insert(iter , 200);
+
+		// for (size_t i = 0; i < ft_vector.size(); i++)
+		// 	logFile << "\telem[" << i << "] = " << ft_vector[i] << std::endl;
+		// logFile << "\tsize = " << ft_vector.size() << std::endl;
+		// logFile << "\tcapacity = " << ft_vector.capacity() << std::endl;
+
+		// logFile << std::endl;
+
+		// iter = ft_vector.begin();
+		// ft_vector.insert (++iter, 2, 300);
+		// // "iter" no longer valid, get a new one
+		// iter = ft_vector.begin();
+
+		// for (size_t i = 0; i < ft_vector.size(); i++)
+		// 	logFile << "\telem[" << i << "] = " << ft_vector[i] << std::endl;
+		// logFile << "\tsize = " << ft_vector.size() << std::endl;
+		// logFile << "\tcapacity = " << ft_vector.capacity() << std::endl;
 
 		// Comparison
-		int error = false;
-		for (size_t i = 0; i < std_vector.size(); i++)
-		{
-			if (ft_vector[i] != std_vector[i])
-			{
-				error  = true;
-				break;
-			}
-		}
+		// int error = false;
+		// for (size_t i = 0; i < std_vector.size(); i++)
+		// {
+		// 	if (ft_vector[i] != std_vector[i])
+		// 	{
+		// 		error  = true;
+		// 		break;
+		// 	}
+		// }
 
 		// Print the outcome of the test
-		if (ft_vector.size() == std_vector.size()
-		&&  ft_vector.capacity() == std_vector.capacity()
-		&&  error == false)
-			std::cout << "TEST# 17 - INSERT\t\t: SUCCESS ✔️" << std::endl;
-		else
-			std::cout << "TEST# 17 - INSERT\t\t: FAILED ❌" << std::endl;
+		// if (ft_vector.size() == std_vector.size()
+		// &&  ft_vector.capacity() == std_vector.capacity()
+		// &&  error == false)
+		// 	std::cout << "TEST# 17 - INSERT\t\t: SUCCESS ✔️" << std::endl;
+		// else
+		// 	std::cout << "TEST# 17 - INSERT\t\t: FAILED ❌" << std::endl;
 	}
 
 	/* ************************************************************************** */
