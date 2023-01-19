@@ -454,9 +454,38 @@ namespace ft
             }
 
             template <class InputIterator>
-            void insert (iterator position, InputIterator first, InputIterator last)
+            void insert (iterator position, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last)
             {
-                ;
+				if (position < begin() || position > end())
+					throw std::out_of_range("Invalid iterator position");
+				if (first > last)
+					throw std::invalid_argument("Invalid range");
+
+				ft::vector<typename ft::iterator_traits<InputIterator>::value_type> tmp;
+				
+				while (first != last)
+					tmp.push_back(*first++);
+
+				difference_type index = &(*position) - _dataArray;
+				size_type       count = tmp.size();
+				size_type       new_size = size() + count;
+
+				reserve(new_size);
+				for (size_type i = 0; i < count; i++)
+					alloc.construct(_dataArray + i, *(_dataArray + i - std::distance(first, last)));
+				for (size_type i = size() + count - 1; i >= index + count; i--)
+					_dataArray[i] = _dataArray[i - count];
+				try
+				{
+					for (size_type i = 0; i < count; i++)
+						_dataArray[index + i] = tmp[i];
+				}
+				catch (...)
+				{
+					capacity = 0;
+					throw;
+				}
+				_size += count;
             }
 
             iterator insert(iterator position, const value_type& val)
