@@ -6,7 +6,7 @@
 /*   By: llethuil <lucas.lethuillier@gmail.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 14:01:41 by llethuil          #+#    #+#             */
-/*   Updated: 2023/01/19 14:32:42 by llethuil         ###   ########.fr       */
+/*   Updated: 2023/01/19 16:29:56 by llethuil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,14 +137,7 @@ namespace ft
 			/*                                        */
 			/* ************************************** */
 
-			// OPERATOR '+' ON INT
-			// Reverse_iterator operator+(int n)
-			// {
-			// 	Reverse_iterator it = *this;
-			// 	it += n;
-			// 	return (it);
-			// }
-
+			// OPERATOR '+' ON n
 			Reverse_iterator operator+(difference_type n) const
 			{
 				Reverse_iterator it = *this;
@@ -152,14 +145,7 @@ namespace ft
 				return (it);
 			}
 
-			// OPERATOR '-' ON INT
-			// Reverse_iterator operator-(int n)
-			// {
-			// 	Reverse_iterator it = *this;
-			// 	it -= n;
-			// 	return (it);
-			// }
-
+			// OPERATOR '-' ON n
 			Reverse_iterator operator-(difference_type n) const
 			{
 				Reverse_iterator it = *this;

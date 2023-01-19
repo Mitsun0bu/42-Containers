@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Iterator.hpp                                       :+:      :+:    :+:   */
+/*   iterator.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llethuil <llethuil@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: llethuil <lucas.lethuillier@gmail.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 13:48:45 by llethuil          #+#    #+#             */
-/*   Updated: 2023/01/16 14:20:27 by llethuil         ###   ########lyon.fr   */
+/*   Updated: 2023/01/19 16:30:41 by llethuil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,16 +137,16 @@ namespace ft
 			/*                                        */
 			/* ************************************** */
 
-			// OPERATOR '+' ON INT
-			Iterator operator+(int n)
+			// OPERATOR '+' ON n
+			Iterator operator+(difference_type n) const
 			{
 				Iterator it = *this;
 				it += n;
 				return (it);
 			}
 
-			// OPERATOR '-' ON INT
-			Iterator operator-(int n)
+			// OPERATOR '-' ON n
+			Iterator operator-(difference_type n) const
 			{
 				Iterator it = *this;
 				it -= n;
@@ -191,14 +191,14 @@ namespace ft
 			/*                                         */
 			/* *************************************** */
 
-			reference	operator->()
-			{
-				return (_ptr);
-			}
-
 			reference	operator*()
 			{
 				return (*_ptr);
+			}
+
+			reference	operator->()
+			{
+				return (_ptr);
 			}
 
 			/* ********************************************** */

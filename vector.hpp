@@ -472,6 +472,7 @@ namespace ft
 				size_type       new_size = size() + count;
 
 				reserve(new_size);
+					// _alloc.construct(_dataArray + index + i, tmp[i]);
 				for (size_type i = 0; i < count; i++)
 					_alloc.construct(_dataArray + i, *(_dataArray + i - std::distance(first, last)));
 				for (size_type i = size() + count - 1; i >= index + count; i--)
@@ -491,7 +492,20 @@ namespace ft
 
             iterator insert(iterator position, const value_type& val)
             {
-                size_t pos = position - this->begin();
+                // size_t pos = position - this->begin();
+
+                // if (_size + 1 > _capacity)
+                //     reallocDataArray(_capacity + 1);
+
+                // for (size_t i = _size; i != pos + 1; i--)
+                //     _dataArray[i] = _dataArray[i - 1];
+
+                // for (size_t i = pos; i < pos + 1; i++)
+                //     _dataArray[i] = val;
+
+                // _size += 1;
+
+                difference_type pos = position - this->begin();
 
                 if (_size + 1 > _capacity)
                 {
@@ -501,14 +515,14 @@ namespace ft
                         reallocDataArray(_capacity * 2);
                 }
 
-                size_t i = _size;
-                for (; i != pos; i --)
+                size_t i = 0;
+                for (i = _size; i > pos; i--)
                     _dataArray[i] = _dataArray[i - 1];
 
                 _dataArray[i] = val;
                 ++_size;
 
-                return (position);
+                return (begin() + pos);
             }
 
             void insert(iterator position, size_type n, const value_type& val)
