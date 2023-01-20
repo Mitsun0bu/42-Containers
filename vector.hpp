@@ -232,55 +232,63 @@ namespace ft
                 return (_alloc.max_size());
             }
 
-            void resize(size_type n, value_type val = value_type())
-            {
-                if (n < _size)
-                    _size = n;
-                else if (n > _size)
-                {
-                    if (n > _capacity)
-                        reserve(n);
-                    for (size_type i = _size; i < n; i ++)
-                        _dataArray[i] = val;
-                    _size = n;
-                }
-            }
+			void resize(size_type n, value_type val = value_type())
+			{
+				if (n == _size)
+					return ;
+				if (n > size())
+				{
+					reserve(n);
+					for (size_type i = _size; i < _capacity; i ++)
+						_alloc.construct(_dataArray + i, val);
+					_size = _capacity;
+				}
+				else if (n < size())
+				{
+					for (size_type i = n; i < _size; i++)
+						_alloc.destroy(_dataArray + i);
+				}
+				_size = n;
+			}
 
-            size_t capacity(void) const
-            {
-                return (_capacity);
-            }
+			size_t capacity(void) const
+			{
+				return (_capacity);
+			}
 
-            bool empty(void) const
-            {
-                if (_size == 0)
-                    return (true);
-                else
-                    return (false);
-            }
+			bool empty(void) const
+			{
+				if (_size == 0)
+					return (true);
+				else
+					return (false);
+			}
 
-            void reserve(size_type n)
-            {
-                if (n > max_size())
-                    throw (std::bad_alloc());
-
-                if (_capacity < n)
-                {
-                    pointer newDataArray = _alloc.allocate(n);
-
-                    for (size_t i = 0; i < n; i++)
-                        _alloc.construct(newDataArray + i);
-
-                    for (size_t i = 0; i < _size; i++)
-                        newDataArray[i] = _dataArray[i];
-
-                    deleteDataArray();
-
-                    _capacity   = n;
-                    _dataArray  = newDataArray;
-                }
-
-                return ;
+			void reserve(size_type n)
+			{
+				pointer	new_array;
+				size_t	old_capacity = _capacity;
+				try
+				{
+					if (n <= _capacity)
+						return ;
+					if (n > _capacity * 2 )
+						_capacity = n;
+					else
+						_capacity *= 2;
+					new_array = _alloc.allocate(_capacity);
+					for (size_t i = 0; i < _size; i++)
+					{
+						_alloc.construct(new_array + i, _dataArray[i]);
+						_alloc.destroy(_dataArray + i);
+					}
+					_alloc.deallocate(_dataArray, old_capacity);
+					_dataArray = new_array;
+				}
+				catch(const std::bad_alloc& e)
+				{
+					throw;
+				}
             }
 
             void shrink_to_fit(void)
@@ -308,7 +316,7 @@ namespace ft
 
             reference at(size_type n)
             {
-                if (n < 0 || n >= _size)
+                if (n < 0 || n > _size)
                     throw (std::out_of_range("Vector index out of range"));
 
                 return (_dataArray[n]);
@@ -316,7 +324,7 @@ namespace ft
 
             const_reference at(size_type n) const
             {
-                if (n < 0 || n >= _size)
+                if (n < 0 || n > _size)
                     throw (std::out_of_range("Vector index out of range"));
 
                 return (_dataArray[n]);
@@ -358,112 +366,120 @@ namespace ft
             /*                            */
             /* ************************** */
 
-            template <class InputIterator>
-            void    assign (typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last)
-            {
-                clear();
-                insert(begin(), first, last);
-            }
+			template <class InputIterator>
+			void	assign (typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last)
+			{
+				ptrdiff_t size = std::distance(first, last);
+				clear();
+				reserve(size);
+				for (ptrdiff_t i = 0; i < size; i++)
+					_alloc.construct(_dataArray + i, *(first + i));
+				_size = size;
+			}
 
-            void assign(size_type n, const value_type& val)
-            {
-                clear();
-                reserve(n);
-                for (size_type i = 0; i < n; ++i)
-                    _dataArray[i] = val;
+			void assign(size_type n, const value_type& val)
+			{
+				clear();
+				reserve(n);
+				for (size_type i = 0; i < n; ++i)
+					_alloc.construct(_dataArray + i, val);
 
-                _size = n;
+				_size = n;
 
-                return;
-            }
+				return;
+			}
 
-            void push_back(const value_type& val)
-            {
-                if (_size == 0)
-                    reallocDataArray(1);
+			void push_back(const value_type& val)
+			{
+				if (_size == 0)
+					reallocDataArray(1);
 
-                else if (_size == _capacity)
-                    reallocDataArray(_capacity * 2);
+				else if (_size == _capacity)
+					reallocDataArray(_capacity * 2);
 
-                _dataArray[_size] = val;
-                _size ++;
+				_dataArray[_size] = val;
+				_size ++;
 
-                return ;
-            }
+				return ;
+			}
 
-            void pop_back(void)
-            {
-                if (_size == 0)
-                    return ;
+			void pop_back(void)
+			{
+				if (_size == 0)
+					return ;
 
-                _alloc.destroy(_dataArray + _size);
+				_alloc.destroy(_dataArray + _size);
 
-                _size --;
+				_size --;
 
-                return ;
-            }
+				return ;
+			}
 
-            template <class InputIterator>
-            void insert (iterator position, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last)
-            {
-                if (position < begin() || position > end())
-                    throw std::out_of_range("Invalid iterator position");
+			template <class InputIterator>
+			void insert (iterator position, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last)
+			{
+				if (position < begin() || position > end())
+					throw std::out_of_range("Invalid iterator position");
 
-                if (first > last)
-                    throw std::invalid_argument("Invalid range");
+				if (first > last)
+					throw std::invalid_argument("Invalid range");
 
-                difference_type pos = position - this->begin();
+				difference_type pos = position - this->begin();
 
-                vector temp(first, last);
-                difference_type count = temp.size();
-                if (_size > max_size() - count)
-                    throw std::length_error("Size overflow");
+				ft::vector<typename ft::iterator_traits<InputIterator>::value_type> temp;
 
-                size_type new_size = _size + count;
-                if (new_size > _capacity)
-                    reserve(_capacity * 2);
+				while (first != last)
+					temp.push_back(*first++);
 
-                for (difference_type i = new_size - 1; i > pos + 1; i--)
-                {
-                    if (i - count < 0)
-                        break;
-                    _dataArray[i] = _dataArray[i - count];
-                }
+				difference_type count = temp.size();
+				if (_size > max_size() - count)
+				    throw std::length_error("Size overflow");
 
-                iterator it = temp.begin();
-                for (difference_type i = pos ; i < pos + count; i++)
-                {
-                    _dataArray[i] = *it;
-                    it ++;
-                }
+				size_type new_size = _size + count;
+				if (new_size > _capacity)
+					reserve(_capacity * 2);
 
-                _size = new_size;
-            }
+				for (difference_type i = new_size - 1; i > pos + 1; i--)
+				{
+					if (i - count < 0)
+						break;
+					_dataArray[i] = _dataArray[i - count];
+				}
 
-            iterator insert(iterator position, const value_type& val)
-            {
-                difference_type pos = position - this->begin();
+				size_type j = 0;
+				for (difference_type i = pos; i < count; i++)
+				{
+					_dataArray[i] = temp.at(j);
+					j ++;
+				}
+
+				_size = new_size;
+			}
+
+			iterator insert(iterator position, const value_type& val)
+			{
+				difference_type pos = position - this->begin();
 
 				if (static_cast<unsigned long>(pos) > _size || pos < 0)
 					throw std::out_of_range("Invalid iterator position");
 
-                if (_size + 1 > _capacity)
-                {
-                    if (_capacity == 0)
-                        reallocDataArray(1);
-                    else
-                        reallocDataArray(_capacity * 2);
-                }
+				if (_size + 1 > _capacity)
+				{
+					if (_capacity == 0)
+						reallocDataArray(1);
+					else
+						reallocDataArray(_capacity * 2);
+				}
 
-                difference_type i = 0;
-                for (i = _size; i > pos; i--)
-                    _dataArray[i] = _dataArray[i - 1];
+				difference_type i = 0;
+				for (i = _size; i > pos; i--)
+					_dataArray[i] = _dataArray[i - 1];
 
-                _dataArray[i] = val;
-                ++_size;
+				_dataArray[i] = val;
+				++_size;
 
-                return (begin() + pos);
-            }
+				return (begin() + pos);
+			}
 
 			void insert(iterator position, size_type n, const value_type& val)
 			{
@@ -492,109 +508,109 @@ namespace ft
 				_size += n;
 			}
 
-            iterator erase(iterator position)
-            {
-                size_t pos = position - this->begin();
+			iterator erase(iterator position)
+			{
+				size_t pos = position - this->begin();
 
-                _alloc.destroy(_dataArray + pos);
+				_alloc.destroy(_dataArray + pos);
 
-                for (size_t i = pos; i < _size - 1; i++)
-                    _dataArray[i] = _dataArray[i + 1];
+				for (size_t i = pos; i < _size - 1; i++)
+					_dataArray[i] = _dataArray[i + 1];
 
-                --_size;
+				--_size;
 
-                return (this->begin() + pos);
-            }
+				return (this->begin() + pos);
+			}
 
-            iterator erase(iterator first, iterator last)
-            {
-                size_t  start    = first - this->begin();
-                size_t  end      = last - this->begin();
-                size_t  n        = end - start;
+			iterator erase(iterator first, iterator last)
+			{
+				size_t	start	= first - this->begin();
+				size_t	end		= last - this->begin();
+				size_t	n		= end - start;
 
-                for (size_t i = end; i < _size; i++)
-                    _dataArray[i - n] = _dataArray[i];
+				for (size_t i = end; i < _size; i++)
+					_dataArray[i - n] = _dataArray[i];
 
-                for (size_t i = _size - n; i < _size; i++)
-                    _alloc.destroy(_dataArray + i);
+				for (size_t i = _size - n; i < _size; i++)
+					_alloc.destroy(_dataArray + i);
 
-                _size -= n;
+				_size -= n;
 
-                return (first);
-            }
+				return (first);
+			}
 
-            void swap(vector& x)
-            {
-                std::swap(_size, x._size);
-                std::swap(_capacity, x._capacity);
-                std::swap(_dataArray, x._dataArray);
-                std::swap(_alloc, x._alloc);
+			void swap(vector& x)
+			{
+				std::swap(_size, x._size);
+				std::swap(_capacity, x._capacity);
+				std::swap(_dataArray, x._dataArray);
+				std::swap(_alloc, x._alloc);
 
-                return ;
-            }
+				return ;
+			}
 
-            void clear()
-            {
-                for (size_t i = 0; i < _size; ++i)
-                    _alloc.destroy(&_dataArray[i]);
+			void clear()
+			{
+				for (size_t i = 0; i < _size; ++i)
+					_alloc.destroy(&_dataArray[i]);
 
-                _size = 0;
+				_size = 0;
 
-                return ;
-            }
+				return ;
+			}
 
-            /* *********************** */
-            /*                         */
-            /*      ~~~ UTILS ~~~      */
-            /*                         */
-            /* *********************** */
+			/* *********************** */
+			/*                         */
+			/*      ~~~ UTILS ~~~      */
+			/*                         */
+			/* *********************** */
 
-            void deleteDataArray(void)
-            {
-                if (_dataArray)
-                {
-                    for (size_type i = 0; i < _capacity; ++i)
-                        _alloc.destroy(_dataArray + i);
-                    _alloc.deallocate(_dataArray, _capacity);
-                }
-                return ;
-            }
+			void deleteDataArray(void)
+			{
+				if (_dataArray)
+				{
+					for (size_type i = 0; i < _capacity; ++i)
+						_alloc.destroy(_dataArray + i);
+					_alloc.deallocate(_dataArray, _capacity);
+				}
+				return ;
+			}
 
-            void reallocDataArray(size_type newCapacity)
-            {
-                if (newCapacity < _capacity)
-                    return ;
+			void reallocDataArray(size_type newCapacity)
+			{
+				if (newCapacity < _capacity)
+					return ;
 
-                _capacity = newCapacity;
+				_capacity = newCapacity;
 
-                pointer newDataArray = _alloc.allocate(newCapacity);
+				pointer newDataArray = _alloc.allocate(newCapacity);
 
-                for (size_t i = 0; i < _capacity; i++)
-                    _alloc.construct(newDataArray + i);
+				for (size_t i = 0; i < _capacity; i++)
+					_alloc.construct(newDataArray + i);
 
-                for (size_t i = 0; i < _size; i++)
-                    newDataArray[i] = _dataArray[i];
+				for (size_t i = 0; i < _size; i++)
+					newDataArray[i] = _dataArray[i];
 
-                deleteDataArray();
+				deleteDataArray();
 
-                _dataArray  = newDataArray;
-            }
+				_dataArray  = newDataArray;
+			}
 
-            template <class InputIterator>
-            void copy( InputIterator first, InputIterator last, iterator result )
-            {
-                while (first!=last) {
-                    *result = *first;
-                    ++result; ++first;
-                }
-            }
-    };
+			template <class InputIterator>
+			void copy( InputIterator first, InputIterator last, iterator result )
+			{
+				while (first!=last) {
+					*result = *first;
+					++result; ++first;
+				}
+			}
+	};
 
-            /* ************************************** */
-            /*                                        */
-            /*      ~~~ RELATIONAL OPERATORS ~~~      */
-            /*                                        */
-            /* ************************************** */
+		/* ************************************** */
+		/*                                        */
+		/*      ~~~ RELATIONAL OPERATORS ~~~      */
+		/*                                        */
+		/* ************************************** */
 
             template <class T, class Alloc>
             bool operator== (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)

@@ -940,13 +940,13 @@ int main(void)
 		logFile << std::endl;
 
 		ft_vector.insert(ft_vector.begin() + 3, 3, 42);
-		logFile << "\tAfter last insertion, std_vector contains:" << std::endl;
+		logFile << "\tAfter last insertion, ft_vector contains:" << std::endl;
 		logFile << "\t";
-		for (it = std_vector.begin(); it < std_vector.end(); it++)
-			logFile << ' ' << *it;
+		for (iter = ft_vector.begin(); iter < ft_vector.end(); iter++)
+			logFile << ' ' << *iter;
 		logFile << std::endl;
-		logFile << "\tsize = " << std_vector.size() << std::endl;
-		logFile << "\tcapacity = " << std_vector.capacity() << std::endl;
+		logFile << "\tsize = " << ft_vector.size() << std::endl;
+		logFile << "\tcapacity = " << ft_vector.capacity() << std::endl;
 		logFile << std::endl;
 
 		// Comparison
