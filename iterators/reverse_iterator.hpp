@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   reverse_iterator.hpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llethuil <lucas.lethuillier@gmail.com>     +#+  +:+       +#+        */
+/*   By: llethuil <llethuil@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 14:01:41 by llethuil          #+#    #+#             */
-/*   Updated: 2023/01/19 16:29:56 by llethuil         ###   ########.fr       */
+/*   Updated: 2023/01/20 17:12:45 by llethuil         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,7 @@ namespace ft
 
 				return (*this);
 			}
-	
+
 			Reverse_iterator& operator+=(difference_type n)
 			{
 				_ptr += n;
@@ -184,7 +184,7 @@ namespace ft
 				_ptr -= n;
 				return (*this);
 			}
-		
+
 			/* *************************************** */
 			/*                                         */
 			/*      ~~~ DEREFERENCE OPERATORS ~~~      */
@@ -211,7 +211,7 @@ namespace ft
 			{
 				return *(_ptr - n - 1);
 			}
-		
+
 			/* *********************************************** */
 			/*                                                 */
 			/*      ~~~ EQUALITY/INEQUALITY OPERATORS ~~~      */
@@ -252,7 +252,7 @@ namespace ft
 				return (_ptr >= x._ptr);
 			}
 
-		private :
+		// private :
 
 			pointer _ptr;
 	};

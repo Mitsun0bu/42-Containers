@@ -192,75 +192,104 @@ namespace ft
 				return (*this);
 			}
 
-            /* *************************** */
-            /*                             */
-            /*      ~~~ ITERATORS ~~~      */
-            /*                             */
-            /* *************************** */
+			/* *************************** */
+			/*                             */
+			/*      ~~~ ITERATORS ~~~      */
+			/*                             */
+			/* *************************** */
 
-            friend class                            Iterator< vector<T> >;
-            friend class                            Reverse_iterator< vector<T> >;
-            friend class                            Const_iterator< vector<T> >;
+			/*
+				Friend classes have access to the private and
+				protected members of another class.
+				Here my iterators have to access the private and
+				protected members of the vector<T> class, such as
+				'_dataArray', '_size', and '_capacity' in order
+				to properly implement the iterator functionality.
+			*/
 
-            typedef Iterator< vector<T> >           iterator;
-            typedef Reverse_iterator< vector<T> >   reverse_iterator;
-            typedef Const_iterator< vector<T> >     const_iterator;
+			// Declaring the class 'Iterator' as a friend class
+			friend class	Iterator< vector<T> >;
 
-            iterator begin()
-            {
-                return (iterator(_dataArray));
-            }
+			// Declaring the class 'Reverse_iterator' as a friend class
+			friend class	Reverse_iterator< vector<T> >;
 
-            const_iterator begin() const
-            {
-                return (const_iterator(_dataArray));
-            }
+			// Declaring the class 'Const_iterator' as a friend class
+			friend class	Const_iterator< vector<T> >;
 
-            iterator end()
-            {
-                return (iterator(_dataArray + _size));
-            }
+			// Typedef for 'Iterator < vector<T> >'
+			typedef Iterator < vector<T> >			iterator;
 
-            const_iterator end() const
-            {
-                return (const_iterator(_dataArray + _size));
-            }
+			// Typedef for 'Reverse_iterator < vector<T> >'
+			typedef Reverse_iterator < vector<T> >	reverse_iterator;
 
-            const_iterator cbegin() const
-            {
-                return (const_iterator(_dataArray));
-            }
+			// Typedef for 'Const_iterator < vector<T> >'
+			typedef Const_iterator < vector<T> >	const_iterator;
 
-            const_iterator cend() const
-            {
-                return (const_iterator(_dataArray + _size));
-            }
+			// Returns an iterator to the first element of the vector
+			iterator begin()
+			{
+				return (iterator(_dataArray));
+			}
 
-            reverse_iterator rbegin()
-            {
-                return (reverse_iterator(_dataArray));
-            }
+			// Returns a constant iterator to the first element of the container
+			const_iterator begin() const
+			{
+				return (const_iterator(_dataArray));
+			}
 
-            reverse_iterator rend()
-            {
-                return (reverse_iterator(_dataArray + _size));
-            }
+			// Returns an iterator to the element right after the last element of the container
+			iterator end()
+			{
+				return (iterator(_dataArray + _size));
+			}
 
-            /* ************************** */
-            /*                            */
-            /*      ~~~ CAPACITY ~~~      */
-            /*                            */
-            /* ************************** */
+			// Returns a constant iterator to the element right after the last element of the container
+			const_iterator end() const
+			{
+				return (const_iterator(_dataArray + _size));
+			}
 
-            size_t size(void) const
-            {
-                return (_size);
-            }
+			// Returns a constant iterator to the first element of the container
+			const_iterator cbegin() const
+			{
+				return (const_iterator(_dataArray));
+			}
 
-            size_t max_size(void) const
-            {
-                return (_alloc.max_size());
-            }
+			// Returns a constant iterator to the element right after the last element of the container
+			const_iterator cend() const
+			{
+				return (const_iterator(_dataArray + _size));
+			}
+
+			// Returns a reverse iterator to the first element of the reversed vector
+			reverse_iterator rbegin()
+			{
+				return (reverse_iterator(_dataArray));
+			}
+
+			// Returns a reverse iterator to the element right after the last element of the reversed container
+			reverse_iterator rend()
+			{
+				return (reverse_iterator(_dataArray + _size));
+			}
+
+			/* ************************** */
+			/*                            */
+			/*      ~~~ CAPACITY ~~~      */
+			/*                            */
+			/* ************************** */
+
+			// Returns '_size' the number of elements currently stored in the vector
+			size_t size(void) const
+			{
+				return (_size);
+			}
+
+			// Returns the maximum number of elements the vector can hold
+			size_t max_size(void) const
+			{
+				return (_alloc.max_size());
+			}
 
 			void resize(size_type n, value_type val = value_type())
 			{

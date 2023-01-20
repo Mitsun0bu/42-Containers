@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   iterator.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llethuil <lucas.lethuillier@gmail.com>     +#+  +:+       +#+        */
+/*   By: llethuil <llethuil@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 13:48:45 by llethuil          #+#    #+#             */
-/*   Updated: 2023/01/19 16:30:41 by llethuil         ###   ########.fr       */
+/*   Updated: 2023/01/20 17:12:32 by llethuil         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,7 +252,7 @@ namespace ft
 				return (_ptr >= x._ptr);
 			}
 
-		protected:
+		// protected:
 
 			pointer _ptr;
 	};
