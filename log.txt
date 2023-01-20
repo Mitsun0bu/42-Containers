@@ -102,10 +102,10 @@
 ~~~~~ TEST# 7 - MAX_SIZE ~~~
 
 	TEST OUTPUT WITH std::vector
-	size = 2305843009213693951
+	size = 4611686018427387903
 
 	TEST OUTPUT WITH ft::vector
-	size = 2305843009213693951
+	size = 4611686018427387903
 
 ~~~~~ TEST# 8 - RESIZE ~~~
 
@@ -146,12 +146,12 @@
 	TEST OUTPUT WITH std::vector
 	size = 100
 	capacity = 128
-	max_size = 2305843009213693951
+	max_size = 4611686018427387903
 
 	TEST OUTPUT WITH ft::vector
 	size = 100
 	capacity = 128
-	max_size = 2305843009213693951
+	max_size = 4611686018427387903
 
 ~~~~~ TEST# 10 - EMPTY ~~~
 
@@ -326,47 +326,59 @@
 ~~~~~ TEST# 17 - INSERT ~~~~~
 
 	TEST OUTPUT WITH std::vector
-After first insertion, std_vector contains:
- 200 100 100 100
-size = : 4
-capacity = : 6
 
-After second insertion, std_vector contains:
- 200 100 100 100 300 300
-size = : 6
-capacity = : 6
+	After first insertion, std_vector contains:
+	 200 100 100 100
+	size = 4
+	capacity = 6
 
-After third insertion, std_vector contains:
- 200 100 400 400 100 100 300 300
-size = : 8
-capacity = : 12
+	After second insertion, std_vector contains:
+	 200 100 100 100 300 300
+	size = 6
+	capacity = 6
 
-After last insertion, std_vector contains:
- 501 502 503 200 100 400 400 100 100 300 300
-size = : 11
-capacity = : 12
+	After third insertion, std_vector contains:
+	 200 100 400 400 100 100 300 300
+	size = 8
+	capacity = 12
+
+	After fourth insertion, std_vector contains:
+	 501 502 503 200 100 400 400 100 100 300 300
+	size = 11
+	capacity = 12
+
+	After last insertion, std_vector contains:
+	 501 502 503 42 42 42 200 100 400 400 100 100 300 300
+	size = 14
+	capacity = 24
 
 
 	TEST OUTPUT WITH ft::vector
-After first insertion, ft_vector contains:
- 200 100 100 100
-size = : 4
-capacity = : 6
 
-After second insertion, ft_vector contains:
- 200 100 100 100 300 300
-size = : 6
-capacity = : 6
+	After first insertion, ft_vector contains:
+	 200 100 100 100
+	size = 4
+	capacity = 6
 
-After third insertion, ft_vector contains:
- 200 100 100 100 300 300 0 0
-size = : 8
-capacity = : 12
+	After second insertion, ft_vector contains:
+	 200 100 100 100 300 300
+	size = 6
+	capacity = 6
 
-After last insertion, ft_vector contains:
- 501 502 503 100 100 100 100 300 300 0 0
-size = : 11
-capacity = : 12
+	After third insertion, ft_vector contains:
+	 200 100 400 400 100 100 300 300
+	size = 8
+	capacity = 12
+
+	After fourth insertion, ft_vector contains:
+	 501 502 503 200 100 400 400 100 100 300 300
+	size = 11
+	capacity = 12
+
+	After last insertion, std_vector contains:
+	 501 502 503 42 42 42 200 100 400 400 100 100 300 300
+	size = 14
+	capacity = 24
 
 
 ~~~~~ TEST# 18 - ERASE ~~~~~

@@ -412,40 +412,29 @@ namespace ft
                 if (first > last)
                     throw std::invalid_argument("Invalid range");
 
-                size_type count = std::distance(first, last);
+                difference_type pos = position - this->begin();
 
+                vector temp(first, last);
+                difference_type count = temp.size();
                 if (_size > max_size() - count)
                     throw std::length_error("Size overflow");
 
                 size_type new_size = _size + count;
-
                 if (new_size > _capacity)
                     reserve(_capacity * 2);
 
-                vector temp(first, last);
- 
-                // for (long unsigned int i = _size - 1; i > std::distance(begin(), position); i--)
-                // {
-                //     std::cout << "i_1 = " << i << std::endl;
-                //     _dataArray[i + count] = _dataArray[i];
-                // }
-
-                // for (long unsigned int i = std::distance(begin(), position); i < std::distance(begin(), position) + count; i++)
-                // {
-                //     std::cout << "i_2 = " << i << std::endl;
-                //     _dataArray[i + static_cast<size_type>(position - begin())] = temp[i];
-                // }
-
-                for (size_type i = _size - 1; i > static_cast<size_type>(position - begin()); i--)
+                for (difference_type i = new_size - 1; i > pos + 1; i--)
                 {
-                    std::cout << "i_1 = " << i << std::endl;
-                    _dataArray[i + count] = _dataArray[i];
+                    if (i - count < 0)
+                        break;
+                    _dataArray[i] = _dataArray[i - count];
                 }
 
-                for (size_type i = 0; i < count; i++)
+                iterator it = temp.begin();
+                for (difference_type i = pos ; i < pos + count; i++)
                 {
-                    std::cout << "i_2 = " << i << std::endl;
-                    _dataArray[i + static_cast<size_type>(position - begin())] = temp[i];
+                    _dataArray[i] = *it;
+                    it ++;
                 }
 
                 _size = new_size;
@@ -454,6 +443,9 @@ namespace ft
             iterator insert(iterator position, const value_type& val)
             {
                 difference_type pos = position - this->begin();
+
+				if (static_cast<unsigned long>(pos) > _size || pos < 0)
+					throw std::out_of_range("Invalid iterator position");
 
                 if (_size + 1 > _capacity)
                 {
@@ -473,21 +465,32 @@ namespace ft
                 return (begin() + pos);
             }
 
-            void insert(iterator position, size_type n, const value_type& val)
-            {
-                size_t pos = position - this->begin();
+			void insert(iterator position, size_type n, const value_type& val)
+			{
+				size_t pos = position - this->begin();
 
-                if (_size + n > _capacity)
-                    reallocDataArray(_capacity + n);
+				if (position < begin() || position > end())
+					throw std::out_of_range("Invalid iterator position");
 
-                for (size_t i = _size - 1; i >= pos; i--)
-                    _dataArray[i] = _dataArray[i - n];
+				if (_size == 0)
+				{
+					reserve(n);
+					for (size_type i = 0; i < n; i++)
+						push_back(val);
+					return ;
+				}
 
-                for (size_t i = pos; i < pos + n; i++)
-                    _dataArray[i] = val;
+				reserve(_size + n);
+				for (size_type i = _size; i > pos + n; i--)
+				{
+					_alloc.construct(_dataArray + i, *(_dataArray + i - n));
+					_alloc.destroy(_dataArray + i - n);
+				}
+				for (size_type i = 0; i < n; i++)
+					_alloc.construct(_dataArray + pos + i, val);
 
-                _size += n;
-            }
+				_size += n;
+			}
 
             iterator erase(iterator position)
             {
