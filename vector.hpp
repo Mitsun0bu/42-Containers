@@ -22,145 +22,175 @@
 
 namespace ft
 {
-    /* ************************************************************************** */
-    /*                                                                            */
-    /*                      ~~~ VECTOR CLASS DEFINITION ~~~                       */
-    /*                                                                            */
-    /* ************************************************************************** */
+	/* ************************************************************************** */
+	/*                                                                            */
+	/*                      ~~~ VECTOR CLASS DEFINITION ~~~                       */
+	/*                                                                            */
+	/* ************************************************************************** */
 
-    template < typename T, typename Alloc = std::allocator<T> >
-    class vector
-    {
-        private:
+	template < typename T, typename Alloc = std::allocator<T> >
+	class vector
+	{
+		private:
 
-            /* ****************************** */
-            /*                                */
-            /*        ~~~ TYPEDEFS ~~~        */
-            /*                                */
-            /* ****************************** */
+			/* ****************************** */
+			/*                                */
+			/*        ~~~ TYPEDEFS ~~~        */
+			/*                                */
+			/* ****************************** */
 
-            typedef T           value_type;
-            typedef value_type* pointer;
-            typedef value_type& reference;
-            typedef const T&    const_reference;
-            typedef Alloc       allocator_type;
-            typedef size_t      size_type;
-            typedef ptrdiff_t	difference_type;
+			// Type of the elements stored in the vector
+			typedef T			value_type;
 
-            /* ********************************* */
-            /*                                   */
-            /*      ~~~ PRIVATE MEMBERS ~~~      */
-            /*                                   */
-            /* ********************************* */
+			// Pointer to an element of the vector
+			typedef value_type*	pointer;
 
-            pointer             _dataArray;
-            Alloc               _alloc;
-            size_type           _size;
-            size_type           _capacity;
+			// Reference to an element of the vector
+			typedef value_type&	reference;
 
-        public:
+			// Constant reference to an element of the vector
+			typedef const T&	const_reference;
 
-            /* ************************************* */
-            /*                                       */
-            /*      ~~~ DEFAULT CONSTRUCTOR ~~~      */
-            /*                                       */
-            /* ************************************* */
+			// Type of the allocator used by the vector
+			typedef Alloc		allocator_type;
 
-            explicit vector(const allocator_type& alloc = allocator_type())
-                : _dataArray(NULL), _alloc(alloc), _size(0), _capacity(0)
-            {
-                return ;
-            }
+			// Type used to represent the size of the vector
+			typedef size_t		size_type;
 
-            /* ********************************** */
-            /*                                    */
-            /*      ~~~ FILL CONSTRUCTOR ~~~      */
-            /*                                    */
-            /* ********************************** */
+			// Type used to represent the difference between two iterators of the vector
+			typedef ptrdiff_t	difference_type;
 
-            explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type())
-                : _alloc(alloc), _size(n), _capacity(n)
-            {
-                _dataArray = _alloc.allocate(_capacity);
-                for(size_t i = 0; i < _size; i++)
-                    _alloc.construct(_dataArray + i, val);
-            }
+			/* ********************************* */
+			/*                                   */
+			/*      ~~~ PRIVATE MEMBERS ~~~      */
+			/*                                   */
+			/* ********************************* */
 
-            /* *********************************** */
-            /*                                     */
-            /*      ~~~ RANGE CONSTRUCTOR ~~~      */
-            /*                                     */
-            /* *********************************** */
+			// Pointer to the memory block where the elements of the vector are stored
+			pointer		_dataArray;
 
-            template <class InputIterator>
-            vector(typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last, const allocator_type& alloc = allocator_type())
-                : _size(0)
-            {
-                std::ptrdiff_t	size = std::distance(first, last);
+			// Object of the allocator type used by the vector
+			Alloc		_alloc;
 
-                _capacity = size;
-                _dataArray = _alloc.allocate(size);
-                _alloc = alloc;
+			// Number of elements currently stored in the vector
+			size_type	_size;
 
-                for(std::ptrdiff_t i = 0; i < size; i++)
-                {
-                    _alloc.construct(_dataArray + i, *(first++));
-                    _size++;
-                }
-            }
+			// Number of elements the vector can currently hold without having to resize its memory block
+			size_type	_capacity;
 
-            /* ********************************** */
-            /*                                    */
-            /*      ~~~ COPY CONSTRUCTOR ~~~      */
-            /*                                    */
-            /* ********************************** */
+		public:
 
-            vector(const vector<T, Alloc>& x)
-                : _dataArray(NULL), _alloc(x._alloc), _size(x._size), _capacity(x._capacity)
-            {
-                *this = x;
-                return ;
-            }
+			/* ************************************* */
+			/*                                       */
+			/*      ~~~ DEFAULT CONSTRUCTOR ~~~      */
+			/*                                       */
+			/* ************************************* */
 
-            /* **************************** */
-            /*                              */
-            /*      ~~~ DESTRUCTOR ~~~      */
-            /*                              */
-            /* **************************** */
+			// Initializes the private members of the class
+			explicit vector(const allocator_type& alloc = allocator_type())
+				: _dataArray(NULL), _alloc(alloc), _size(0), _capacity(0)
+			{
+				return ;
+			}
 
-            ~vector()
-            {
-                if (_dataArray)
-                    deleteDataArray();
-            }
+			/* ********************************** */
+			/*                                    */
+			/*      ~~~ FILL CONSTRUCTOR ~~~      */
+			/*                                    */
+			/* ********************************** */
 
-            /* ********************************************** */
-            /*                                                */
-            /*      ~~~ ASSIGNMENT OPERATOR OVERLOAD ~~~      */
-            /*                                                */
-            /* ********************************************** */
+			explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type())
+				: _alloc(alloc), _size(n), _capacity(n)
+			{
+				// Allocate memory for '_dataArray' with '_capacity'
+				_dataArray = _alloc.allocate(_capacity);
 
-            vector& operator=(const vector& x)
-            {
-                // Check for self-assignment
-                if (this != &x)
-                {
-                    // Deallocate the current elements
-                    deleteDataArray();
+				// Construct '_dataArray' element at 'i' with value 'val'
+				for(size_t i = 0; i < _size; i++)
+					_alloc.construct(_dataArray + i, val);
+			}
 
-                    // Copy the size and capacity from the other vector
-                    _size       = x._size;
-                    _capacity   = x._capacity;
+			/* *********************************** */
+			/*                                     */
+			/*      ~~~ RANGE CONSTRUCTOR ~~~      */
+			/*                                     */
+			/* *********************************** */
 
-                    // Allocate memory for the new elements
-                    _dataArray = _alloc.allocate(_capacity);
+			template <class InputIterator>
+			vector(typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last, const allocator_type& alloc = allocator_type())
+				: _size(0)
+			{
+				std::ptrdiff_t	inputRangeSize = std::distance(first, last);
 
-                    // Copy the elements from the other vector
-                    for(size_t i = 0; i < _size; i++)
-                        _alloc.construct(_dataArray + i, x._dataArray[i]);
-                }
-                return (*this);
-            }
+				// Set the '_capacity' of the vector to the 'inputRangeSize'
+				_capacity = inputRangeSize;
+
+				// Allocate memory for '_dataArray' using '_capacity'
+				_alloc = alloc;
+				_dataArray = _alloc.allocate(_capacity);
+
+				for(std::ptrdiff_t i = 0; i < inputRangeSize; i++)
+				{
+					// Construct '_dataArray' element at 'i' using the value pointed by 'first'
+					_alloc.construct(_dataArray + i, *(first++));
+					// Increment the '_size' of the vector
+					_size++;
+				}
+			}
+
+			/* ********************************** */
+			/*                                    */
+			/*      ~~~ COPY CONSTRUCTOR ~~~      */
+			/*                                    */
+			/* ********************************** */
+
+			vector(const vector<T, Alloc>& x)
+				: _dataArray(NULL), _alloc(x._alloc), _size(x._size), _capacity(x._capacity)
+			{
+				// Initialize the current vector with the values of the other vector 'x'
+				*this = x;
+				return ;
+			}
+
+			/* **************************** */
+			/*                              */
+			/*      ~~~ DESTRUCTOR ~~~      */
+			/*                              */
+			/* **************************** */
+
+			~vector()
+			{
+				if (_dataArray)
+					deleteDataArray();
+			}
+
+			/* ********************************************** */
+			/*                                                */
+			/*      ~~~ ASSIGNMENT OPERATOR OVERLOAD ~~~      */
+			/*                                                */
+			/* ********************************************** */
+
+			vector& operator=(const vector& x)
+			{
+				// Check for self-assignment
+				if (this != &x)
+				{
+					// Deallocate the current elements
+					deleteDataArray();
+
+					// Copy the '_size' and '_capacity' from the other vector 'x'
+					_size		= x._size;
+					_capacity	= x._capacity;
+
+					// Allocate memory for '_dataArray' using '_capacity'
+					_dataArray = _alloc.allocate(_capacity);
+
+					// Construct '_dataArray' element at 'i' using 'x._dataArray[i]' from the other vector
+					for(size_t i = 0; i < _size; i++)
+						_alloc.construct(_dataArray + i, x._dataArray[i]);
+				}
+				return (*this);
+			}
 
             /* *************************** */
             /*                             */
@@ -420,40 +450,33 @@ namespace ft
 			{
 				if (position < begin() || position > end())
 					throw std::out_of_range("Invalid iterator position");
-
 				if (first > last)
 					throw std::invalid_argument("Invalid range");
 
-				difference_type pos = position - this->begin();
-
-				ft::vector<typename ft::iterator_traits<InputIterator>::value_type> temp;
-
+				ft::vector<typename ft::iterator_traits<InputIterator>::value_type> buff;
 				while (first != last)
-					temp.push_back(*first++);
+					buff.push_back(*first++);
 
-				difference_type count = temp.size();
-				if (_size > max_size() - count)
-				    throw std::length_error("Size overflow");
+				difference_type	pos			= position - this->begin();
+				size_type		count		= buff.size();
+				size_type		new_size	= size() + count;
 
-				size_type new_size = _size + count;
-				if (new_size > _capacity)
-					reserve(_capacity * 2);
-
-				for (difference_type i = new_size - 1; i > pos + 1; i--)
-				{
-					if (i - count < 0)
-						break;
+				reserve(new_size);
+				for (size_type i = 0; i < count; i++)
+					_alloc.construct(_dataArray + i, *(_dataArray + i - std::distance(first, last)));
+				for (size_type i = size() + count - 1; i >= pos + count; i--)
 					_dataArray[i] = _dataArray[i - count];
-				}
-
-				size_type j = 0;
-				for (difference_type i = pos; i < count; i++)
+				try
 				{
-					_dataArray[i] = temp.at(j);
-					j ++;
+				for (size_type i = 0; i < count; i++)
+					_dataArray[pos + i] = buff[i];
 				}
-
-				_size = new_size;
+				catch (...)
+				{
+					_capacity = 0;
+					throw;
+				}
+				_size += count;
 			}
 
 			iterator insert(iterator position, const value_type& val)
@@ -569,8 +592,10 @@ namespace ft
 			{
 				if (_dataArray)
 				{
+					// Destroy all elements in '_dataArray'
 					for (size_type i = 0; i < _capacity; ++i)
 						_alloc.destroy(_dataArray + i);
+					// Deallocate memory of '_dataArray' using '_capacity'
 					_alloc.deallocate(_dataArray, _capacity);
 				}
 				return ;
