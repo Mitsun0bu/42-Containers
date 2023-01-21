@@ -86,7 +86,7 @@ namespace ft
 			/*                                       */
 			/* ************************************* */
 
-			// Initializes the private members of the class
+			// Constructs an empty vector, with no elements
 			explicit vector(const allocator_type& alloc = allocator_type())
 				: _dataArray(NULL), _alloc(alloc), _size(0), _capacity(0)
 			{
@@ -99,6 +99,7 @@ namespace ft
 			/*                                    */
 			/* ********************************** */
 
+			// Constructs a vector with 'n' elements, each initialized to 'val'
 			explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type())
 				: _alloc(alloc), _size(n), _capacity(n)
 			{
@@ -116,6 +117,8 @@ namespace ft
 			/*                                     */
 			/* *********************************** */
 
+			// Constructs a vector with as many elements as the range [first,last), 
+			// each element constructed from its corresponding element in that range, in the same order.
 			template <class InputIterator>
 			vector(typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last, const allocator_type& alloc = allocator_type())
 				: _size(0)
@@ -129,10 +132,12 @@ namespace ft
 				_alloc = alloc;
 				_dataArray = _alloc.allocate(_capacity);
 
+				// Construct '_dataArray' element at 'i' from 0 to 'inputRangeSize'
+				// using the value pointed by 'first'
 				for(std::ptrdiff_t i = 0; i < inputRangeSize; i++)
 				{
-					// Construct '_dataArray' element at 'i' using the value pointed by 'first'
 					_alloc.construct(_dataArray + i, *(first++));
+
 					// Increment the '_size' of the vector
 					_size++;
 				}
@@ -144,11 +149,13 @@ namespace ft
 			/*                                    */
 			/* ********************************** */
 
+			// Constructs a vector with a copy of each of the elements in 'x', in the same order.
 			vector(const vector<T, Alloc>& x)
 				: _dataArray(NULL), _alloc(x._alloc), _size(x._size), _capacity(x._capacity)
 			{
 				// Initialize the current vector with the values of the other vector 'x'
 				*this = x;
+
 				return ;
 			}
 
@@ -158,6 +165,8 @@ namespace ft
 			/*                              */
 			/* **************************** */
 
+			// Destroys all container elements, and deallocates all the
+			// storage capacity allocated by the vector using its allocator
 			~vector()
 			{
 				if (_dataArray)
@@ -170,6 +179,7 @@ namespace ft
 			/*                                                */
 			/* ********************************************** */
 
+			// Copies all the elements from x into the container
 			vector& operator=(const vector& x)
 			{
 				// Check for self-assignment
@@ -185,7 +195,7 @@ namespace ft
 					// Allocate memory for '_dataArray' using '_capacity'
 					_dataArray = _alloc.allocate(_capacity);
 
-					// Construct '_dataArray' element at 'i' using 'x._dataArray[i]' from the other vector
+					// Construct '_dataArray' element at 'i' using 'x._dataArray[i]' from 0 to '_size'
 					for(size_t i = 0; i < _size; i++)
 						_alloc.construct(_dataArray + i, x._dataArray[i]);
 				}
@@ -279,7 +289,7 @@ namespace ft
 			/*                            */
 			/* ************************** */
 
-			// Returns '_size' the number of elements currently stored in the vector
+			// Returns '_size', the number of elements currently stored in the vector
 			size_t size(void) const
 			{
 				return (_size);
@@ -291,30 +301,39 @@ namespace ft
 				return (_alloc.max_size());
 			}
 
+			// Resizes the vector so that it contains 'n' elements
 			void resize(size_type n, value_type val = value_type())
 			{
 				if (n == _size)
 					return ;
-				if (n > size())
+
+				if (n > _size)
 				{
 					reserve(n);
+
+					// Construct '_dataArray' element at 'i' from '_size' to '_capacity' using 'val' 
 					for (size_type i = _size; i < _capacity; i ++)
 						_alloc.construct(_dataArray + i, val);
+
 					_size = _capacity;
 				}
-				else if (n < size())
+				else if (n < _size)
 				{
+					// Destroy '_dataArray' element at 'i' from 'n' to _size
 					for (size_type i = n; i < _size; i++)
 						_alloc.destroy(_dataArray + i);
 				}
 				_size = n;
 			}
 
+			// Returns '_capacity', the size of the storage space
+			// currently allocated for the vector, expressed in terms of elements
 			size_t capacity(void) const
 			{
 				return (_capacity);
 			}
 
+			// Returns whether the size of the vector is 0
 			bool empty(void) const
 			{
 				if (_size == 0)
@@ -323,25 +342,42 @@ namespace ft
 					return (false);
 			}
 
+			// Resizes the '_capacity' of the vector to 'n' by allocating new memory and copying elements from the old memory location to the new one
 			void reserve(size_type n)
 			{
 				pointer	new_array;
 				size_t	old_capacity = _capacity;
+
 				try
 				{
+					// Return if 'n' is <= to the current '_capacity'
 					if (n <= _capacity)
 						return ;
-					if (n > _capacity * 2 )
+
+					// Update '_capacity'
+
+					// If 'n' is > than '2 * _capacity', set '_capacity' to 'n'
+					if (n > 2 * _capacity)
 						_capacity = n;
+
+					// Else double the current '_capacity'
 					else
 						_capacity *= 2;
+
+					// Allocate memory for 'new_array' using '_capacity'
 					new_array = _alloc.allocate(_capacity);
+
+					// Copy data from '_dataArray' to 'new_array' and destroy the old elements in '_dataArray'
 					for (size_t i = 0; i < _size; i++)
 					{
 						_alloc.construct(new_array + i, _dataArray[i]);
 						_alloc.destroy(_dataArray + i);
 					}
+
+					// Deallocate old '_dataArray' memory using 'old_capacity'
 					_alloc.deallocate(_dataArray, old_capacity);
+
+					// Set '_dataArray' to 'new_array'
 					_dataArray = new_array;
 				}
 				catch(const std::bad_alloc& e)
@@ -350,6 +386,7 @@ namespace ft
 				}
             }
 
+			// Requests the container to reduce its capacity to fit its size
             void shrink_to_fit(void)
             {
                 _capacity = _size;
@@ -363,16 +400,19 @@ namespace ft
             /*                                  */
             /* ******************************** */
 
+			// Returns a reference to the element at position 'n' in the vector
             reference operator[](size_type n)
             {
                 return (_dataArray[n]);
             }
 
+			// Returns a const reference to the element at position 'n' in the vector
             const_reference operator[](size_type n) const
             {
                 return (_dataArray[n]);
             }
 
+			// Returns a reference to the element at position 'n' in the vector
             reference at(size_type n)
             {
                 if (n < 0 || n > _size)
@@ -381,6 +421,7 @@ namespace ft
                 return (_dataArray[n]);
             }
 
+			// Returns a const reference to the element at position 'n' in the vector
             const_reference at(size_type n) const
             {
                 if (n < 0 || n > _size)
@@ -389,31 +430,37 @@ namespace ft
                 return (_dataArray[n]);
             }
 
+			// Returns a reference to the first element in the vector
             reference front(void)
             {
                 return (_dataArray[0]);
             }
 
+			// Returns a const reference to the first element in the vector
             const_reference front(void) const
             {
                 return (_dataArray[0]);
             }
 
+			// Returns a reference to the last element in the vector
             reference back(void)
             {
                 return (_dataArray[_size - 1]);
             }
 
+			// Returns a const reference to the last element in the vector
             const_reference back(void) const
             {
                 return (_dataArray[_size - 1]);
             }
 
+			// Returns a pointer to the first element in the underlying array of the vector
             value_type* data(void)
             {
                 return (&_dataArray[0]);
             }
 
+			// Returns a const pointer to the first element in the underlying array of the vector
             const value_type* data(void) const
             {
                 return (&_dataArray[0]);
@@ -425,24 +472,44 @@ namespace ft
             /*                            */
             /* ************************** */
 
+			// Assigns the values within the range [first, last) to the vector,
+			// replacing its current contents, and modifying its size accordingly
 			template <class InputIterator>
 			void	assign (typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last)
 			{
-				ptrdiff_t size = std::distance(first, last);
+				// Get the 'inputRangeSize'
+				ptrdiff_t inputRangeSize = std::distance(first, last);
+
+				// Clear the current vector
 				clear();
-				reserve(size);
-				for (ptrdiff_t i = 0; i < size; i++)
+
+				// Reserve memory for the new elements using 'inputRangeSize'
+				reserve(inputRangeSize);
+
+				// Construct '_dataArray' element at 'i' from 0 to 'inputRangeSize' using the values in the input range
+				for (ptrdiff_t i = 0; i < inputRangeSize; i++)
 					_alloc.construct(_dataArray + i, *(first + i));
-				_size = size;
+				
+				// Update the '_size' of the vector using 'inputRangeSize'
+				_size = inputRangeSize;
 			}
 
+			// Assigns a new number 'n' of elements to the vector,
+			// replacing its current contents by 'val',
+			// and changes its size accordingly allocating the necessary memory
 			void assign(size_type n, const value_type& val)
 			{
+				// Clear the current vector
 				clear();
+
+				// Reserve memory for the 'n' elements
 				reserve(n);
+
+				// Construct '_dataArray' element at 'i' from 0 to 'n' using 'val'
 				for (size_type i = 0; i < n; ++i)
 					_alloc.construct(_dataArray + i, val);
 
+				// Update the '_size' of the vector using 'n'
 				_size = n;
 
 				return;
@@ -617,6 +684,7 @@ namespace ft
 			/*                         */
 			/* *********************** */
 
+			// Destroys all container elements, and deallocates all the storage capacity allocated by the vector using its allocator
 			void deleteDataArray(void)
 			{
 				if (_dataArray)
@@ -624,6 +692,7 @@ namespace ft
 					// Destroy all elements in '_dataArray'
 					for (size_type i = 0; i < _capacity; ++i)
 						_alloc.destroy(_dataArray + i);
+
 					// Deallocate memory of '_dataArray' using '_capacity'
 					_alloc.deallocate(_dataArray, _capacity);
 				}
